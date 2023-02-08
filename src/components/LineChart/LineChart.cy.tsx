@@ -18,7 +18,7 @@ describe("<LineChart />", () => {
         },
       ],
     };
-    cy.mount(<LineChart title="Cypress Chart" data={data} />);
+    cy.mount(<LineChart data={data} />);
     cy.findByText("Cypress Chart").should("exist");
   });
 });

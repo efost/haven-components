@@ -9,9 +9,6 @@ export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
 
 const chartOptions: ChartOptionsWithHoverLine = {
   aspectRatio: 1.33,
-  font: {
-    family: "'Nunito Sans', sans-serif",
-  },
   mouseLine: {
     color: "rgb(77, 76, 76)",
   },
@@ -24,6 +21,7 @@ const chartOptions: ChartOptionsWithHoverLine = {
       fill: "start",
     },
     point: {
+      backgroundColor: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
       hoverRadius: 6,
       radius: 4.5,
     },
@@ -35,44 +33,7 @@ const chartOptions: ChartOptionsWithHoverLine = {
   },
   plugins: {
     annotation: {
-      annotations: [
-        {
-          display: (chart, options) => {
-            // console.log('chart', chart.chart.isDatasetVisible(0));
-            // your logic, for instance the annoatation is shown
-            // only if a dataset (in this case the first one) is not hidden
-            return chart.chart.isDatasetVisible(1);
-          },
-          type: "label",
-          xValue: 1.25,
-          yMax: 60000,
-          yValue: 90000,
-          backgroundColor: "transparent",
-          content: ["Estated.com", "home value"],
-          font: {
-            family: "'Nunito Sans', sans-serif",
-            size: 14,
-          },
-        },
-        {
-          display: (chart, options) => {
-            // console.log('chart', chart.chart.isDatasetVisible(0));
-            // your logic, for instance the annoatation is shown
-            // only if a dataset (in this case the first one) is not hidden
-            return chart.chart.isDatasetVisible(0);
-          },
-          type: "label",
-          xValue: 4.5,
-          yMax: 60000,
-          yValue: 90000,
-          backgroundColor: "transparent",
-          content: ["Appraised home", "value"],
-          font: {
-            family: "'Nunito Sans', sans-serif",
-            size: 14,
-          },
-        },
-      ],
+      annotations: [],
     },
     filler: {
       // @ts-ignore-line
@@ -80,14 +41,26 @@ const chartOptions: ChartOptionsWithHoverLine = {
     },
     legend: {
       labels: {
-        font: {
-          family: "'Nunito Sans', sans-serif",
-        },
-        usePointStyle: true,
+        boxHeight: 12,
+        boxWidth: 12,
+        pointStyle: "circle",
       },
       position: "bottom",
     },
     tooltip: {
+      callbacks: {
+        label: (context) => {
+          let label = `${context.dataset.label}: `;
+          if (context.parsed.y !== null) {
+            label += new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 0,
+            }).format(context.parsed.y);
+          }
+          return label;
+        },
+      },
       cornerRadius: 0,
       caretPadding: 10,
       caretSize: 0,
@@ -101,23 +74,29 @@ const chartOptions: ChartOptionsWithHoverLine = {
         //   tooltipModel.options.backgroundColor = color
         // }
       },
-      titleFont: {
-        family: "'Nunito Sans', sans-serif",
-      },
-      bodyFont: {
-        family: "'Nunito Sans', sans-serif",
-        size: 14,
-      },
     },
   },
   scales: {
     x: {
+      grace: "5%",
       grid: {
         display: false,
       },
     },
     y: {
+      border: {
+        display: false,
+      },
       grace: "5%",
+      ticks: {
+        callback: (label) =>
+          Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0,
+          }).format(label as number),
+        padding: 10,
+      },
       type: "linear",
     },
   },

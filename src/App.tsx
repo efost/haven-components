@@ -1,20 +1,8 @@
 import "./App.css";
 
 import { faker } from "@faker-js/faker";
+import { Box } from "@mui/material";
 import { LineChart } from "src/components/LineChart";
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Line Chart",
-    },
-  },
-};
 
 const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
@@ -39,7 +27,9 @@ export const data = {
 function App() {
   return (
     <div className="App">
-      <LineChart data={data} options={options} />
+      <Box sx={{ width: "380px", margin: "0 auto" }}>
+        <LineChart data={data} />
+      </Box>
     </div>
   );
 }

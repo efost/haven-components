@@ -11,7 +11,9 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
     "format": "prettier --write src//**/*.{ts,tsx,css} --config ./.prettierrc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "husky": {
     "hooks": {
@@ -29,18 +31,27 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/haven-components.es.js",
-      "require": "./dist/haven-components.umd.js"
+      "import": "./dist/haven-components.js",
+      "require": "./dist/haven-components.js"
     },
     "./dist/style.css": "./dist/style.css"
   },
-  "main": "./dist/haven-components.umd.js",
-  "module": "./dist/haven-components.es.js",
+  "main": "./dist/haven-components.js",
+  "module": "./dist/haven-components.js",
   "types": "./dist/index.d.ts",
   "devDependencies": {
+    "@babel/core": "^7.20.12",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.6",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@storybook/addon-actions": "^7.0.0-beta.43",
+    "@storybook/addon-essentials": "^7.0.0-beta.43",
+    "@storybook/addon-interactions": "^7.0.0-beta.43",
+    "@storybook/addon-links": "^7.0.0-beta.43",
+    "@storybook/react": "^7.0.0-beta.43",
+    "@storybook/react-vite": "^7.0.0-beta.43",
+    "@storybook/testing-library": "^0.0.14-next.1",
     "@testing-library/cypress": "^9.0.0",
     "@types/faker": "^6.6.9",
     "@types/jest": "^29.4.0",
@@ -50,6 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
     "@vitejs/plugin-react": "^2.1.0",
+    "babel-loader": "^8.3.0",
     "chartjs-plugin-annotation": "^2.1.2",
     "cypress": "^12.5.1",
     "eslint": "^8.2.0",
@@ -60,11 +72,15 @@
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-storybook": "^0.6.10",
     "husky": "^8.0.3",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-delete": "^2.0.0",
+    "storybook": "^7.0.0-beta.43",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vite-plugin-dts": "^1.4.1",
@@ -74,9 +90,8 @@
   "peerDependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/material": "^5.11.6",
-    "react": "16.8.0 || >=17.x",
-    "react-dom": "16.8.0 || >=17.x"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "repository": {
     "type": "git",

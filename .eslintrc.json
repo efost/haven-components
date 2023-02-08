@@ -6,6 +6,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:storybook/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -22,7 +23,8 @@
     "@typescript-eslint",
     "react-hooks",
     "prettier",
-    "simple-import-sort"
+    "simple-import-sort",
+    "storybook"
   ],
   "rules": {
     "camelcase": "error",

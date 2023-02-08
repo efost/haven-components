@@ -15,7 +15,7 @@ const setActiveElements = function (chart: Chart, index: number) {
   console.log("2");
   chart.setActiveElements([
     {
-      datasetIndex: 0,
+      datasetIndex: 1,
       index,
     },
   ]);
