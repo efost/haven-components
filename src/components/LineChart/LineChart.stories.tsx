@@ -37,5 +37,4 @@ Default.args = {
       },
     ],
   },
-  title: "Chart Example",
 };

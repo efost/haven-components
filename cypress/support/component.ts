@@ -35,11 +35,13 @@ declare global {
   namespace Cypress {
     interface Chainable {
       mount: typeof mount;
+      matchImageSnapshot: typeof addMatchImageSnapshotCommand;
     }
   }
 }
 
 Cypress.Commands.add("mount", mount);
+Cypress.Commands.add("matchImageSnapshot", addMatchImageSnapshotCommand);
 
 // Example use:
 // cy.mount(<MyComponent />)
