@@ -27,7 +27,8 @@ const hoverLine: Plugin<"line"> = {
       chartOptions.mouseLine.x = -100;
     }
   },
-  afterDatasetsDraw: function (chart: ChartJS<"line">) {
+  beforeDatasetsDraw: function (chart: ChartJS<"line">) {
+    console.log("drawing line");
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
 
