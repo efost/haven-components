@@ -1,4 +1,6 @@
-import { ChartOptions, Color, TooltipModel } from "chart.js";
+import { ChartOptions, Color } from "chart.js";
+
+import externalTooltipHandler from "../plugins/customTooltips";
 
 export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   mouseLine: {
@@ -17,13 +19,17 @@ const chartOptions: ChartOptionsWithHoverLine = {
     line: {
       backgroundColor: ["rgb(125, 162, 158)", "rgb(215, 213, 210)"],
       borderColor: "rgb(77, 76, 76)",
-      borderWidth: 1,
+      borderWidth: 2,
       fill: "start",
     },
     point: {
-      backgroundColor: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
-      hoverRadius: 6,
-      radius: 4.5,
+      backgroundColor: "rgb(255, 255, 255)",
+      hoverBackgroundColor: "rgb(1, 57, 54)",
+      hoverBorderColor: "rgb(1, 57, 54)",
+      borderColor: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
+      borderWidth: 2,
+      hoverRadius: 4.5,
+      radius: 3,
     },
   },
   interaction: {
@@ -48,9 +54,10 @@ const chartOptions: ChartOptionsWithHoverLine = {
       position: "bottom",
     },
     tooltip: {
+      bodyAlign: "center",
       callbacks: {
         label: (context) => {
-          let label = `${context.dataset.label}: `;
+          let label = "";
           if (context.parsed.y !== null) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
@@ -58,22 +65,16 @@ const chartOptions: ChartOptionsWithHoverLine = {
               minimumFractionDigits: 0,
             }).format(context.parsed.y);
           }
-          return label;
+          return [context.dataset.label || "", label];
         },
+        title: () => "",
       },
       cornerRadius: 0,
       caretPadding: 10,
       caretSize: 0,
       displayColors: false,
-      external: (context) => {
-        const tooltipModel = context.tooltip as TooltipModel;
-        // console.log(tooltipModel)
-        // if (tooltipModel.opacity !== 0 && data?.labels?.length && data.datasets.length) {
-        //   const dataSetIndex = tooltipModel.dataPoints[0].datasetIndex
-        //   const color = tooltipBackgroundColors[dataSetIndex]
-        //   tooltipModel.options.backgroundColor = color
-        // }
-      },
+      enabled: false,
+      external: externalTooltipHandler,
     },
   },
   scales: {

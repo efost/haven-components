@@ -28,7 +28,6 @@ const hoverLine: Plugin<"line"> = {
     }
   },
   beforeDatasetsDraw: function (chart: ChartJS<"line">) {
-    console.log("drawing line");
     const ctx = chart.ctx;
     const chartArea = chart.chartArea;
 
@@ -43,25 +42,21 @@ const hoverLine: Plugin<"line"> = {
       ctx.lineWidth = 2;
       ctx.moveTo(chartOptions.mouseLine.x || 0, chartArea.bottom);
       ctx.lineTo(chartOptions.mouseLine.x || 0, chartArea.top);
-      ctx.setLineDash([2, 1]);
+      ctx.setLineDash([2, 2]);
       ctx.stroke();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.42)";
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 1;
+      // ctx.shadowColor = "rgba(0, 0, 0, 0.42)";
+      // ctx.shadowBlur = 8;
+      // ctx.shadowOffsetX = 0;
+      // ctx.shadowOffsetY = 1;
       ctx.beginPath();
-      ctx.moveTo(x, chartArea.top - 6);
-      ctx.lineTo(x - 6, chartArea.top);
-      ctx.lineTo(x, chartArea.top + 6);
-      ctx.lineTo(x + 6, chartArea.top);
-      ctx.closePath();
       ctx.fillStyle = chartOptions.mouseLine.color;
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(x, chartArea.bottom - 6);
-      ctx.lineTo(x - 6, chartArea.bottom);
-      ctx.lineTo(x, chartArea.bottom + 6);
-      ctx.lineTo(x + 6, chartArea.bottom);
+      ctx.arc(x, chartArea.top, 3, 0, Math.PI + (Math.PI * 4) / 2, false);
+      ctx.fillStyle = chartOptions.mouseLine.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, chartArea.bottom, 3, 0, Math.PI + (Math.PI * 4) / 2, false);
       ctx.closePath();
       ctx.fillStyle = chartOptions.mouseLine.color;
       ctx.fill();

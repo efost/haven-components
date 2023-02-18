@@ -25,7 +25,7 @@ import hoverLine, { ChartOptionsWithHoverLine } from "./plugins/hoverLine";
 export interface ChartTheme {
   font?: string;
   fontSize?: number;
-  colors: {
+  colors?: {
     point?: string;
     line?: string;
     fill?: string;
@@ -81,15 +81,15 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
       ...data.datasets.map((set, i) => {
         return {
           backgroundColor:
-            chartTheme?.colors[i].fill ||
+            chartTheme?.colors?.[i].fill ||
             options?.elements?.line?.backgroundColor ||
             defaultOptions.elements?.line?.backgroundColor,
           borderColor:
-            chartTheme?.colors[i].line ||
+            chartTheme?.colors?.[i].line ||
             options?.elements?.line?.borderColor ||
             defaultOptions.elements?.line?.borderColor,
           pointBackgroundColor:
-            chartTheme?.colors[i].point ||
+            chartTheme?.colors?.[i].point ||
             options?.elements?.point?.backgroundColor ||
             defaultOptions.elements?.point?.backgroundColor,
           ...set,
@@ -99,28 +99,6 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
   };
 
   const optionOverrides: ChartOptions = {
-    // elements: {
-    //   ...defaultOptions.elements,
-    //   ...options?.elements,
-    //   line: {
-    //     ...defaultOptions.elements?.line,
-    //     ...options?.elements?.line,
-    //     backgroundColor:
-    //       chartTheme?.colors[0].fill ||
-    //       options?.elements?.line?.backgroundColor ||
-    //       defaultOptions.elements?.line?.backgroundColor,
-    //     borderColor:
-    //       chartTheme?.colors[0].line ||
-    //       options?.elements?.line?.borderColor ||
-    //       defaultOptions.elements?.line?.borderColor,
-    //   },
-    //   point: {
-    //     backgroundColor:
-    //       chartTheme?.colors[0].point ||
-    //       options?.elements?.point?.backgroundColor ||
-    //       defaultOptions.elements?.point?.backgroundColor,
-    //   },
-    // },
     plugins: {
       ...defaultOptions.plugins,
       ...options?.plugins,
@@ -133,28 +111,6 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
         bodyFont: {
           family: chartTheme?.font || "'Nunito Sans', sans-serif",
         },
-      },
-      annotation: {
-        annotations: [
-          // ...data.datasets.map((set, i): AnnotationOptions => {
-          //   const data = set.data;
-          //   return {
-          //     type: "label",
-          //     xValue: 1.25 * (i + 1),
-          //     yMax: 60000,
-          //     yValue: Math.max(...(data as number[])) / 2,
-          //     backgroundColor: "transparent",
-          //     content: ["Estated.com", "home value"],
-          //     font: {
-          //       family: "'Nunito Sans', sans-serif",
-          //       size: 14,
-          //       style: "normal",
-          //       weight: "400",
-          //       lineHeight: "normal",
-          //     },
-          //   };
-          // }),
-        ],
       },
     },
   };
@@ -253,9 +209,9 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
 
   return (
     <>
-      <Box className="text" style={{ width: "100%" }}>
+      <Box className="text" sx={{ position: "relative", width: "100%" }}>
         <Line
-          data={{ ...dataWithColors }}
+          data={dataWithColors}
           options={chartOptions}
           plugins={[hoverLine]}
           aria-label={ariaLabel}
@@ -293,3 +249,5 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
     </>
   );
 };
+
+LineChart.displayName = "LineChart";
