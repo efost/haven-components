@@ -43,7 +43,7 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
       table.style.position = "absolute";
       tooltipEl.appendChild(table);
       const tableBody = document.createElement("tbody");
-      bodyLines.forEach((body: string) => {
+      bodyLines.forEach((body: string, lineIdx: number) => {
         const node = document.createTextNode(body);
         const tr = document.createElement("tr");
         tr.style.backgroundColor = "inherit";
@@ -52,6 +52,31 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
         td.style.borderWidth = "0";
         td.style.whiteSpace = "nowrap";
         td.appendChild(node);
+        const activeIndex = chart.getActiveElements()[idx].index;
+        const pointData = chart.data.datasets[idx].data.at(activeIndex);
+        const prevPointData = chart.data.datasets[idx].data.at(activeIndex - 1);
+        if (![pointData, prevPointData].includes(null)) {
+          const pointValue = (pointData as number) || 0;
+          const prevPointValue = (prevPointData as number) || 0;
+          const valueDiff = pointValue - prevPointValue;
+          if (activeIndex > -1 && lineIdx === 1 && valueDiff !== 0) {
+            const diffSpan = document.createElement("span");
+            const arrow = document.createElement("img");
+            arrow.src = "/arrow.png";
+            arrow.style.width = "14px";
+            arrow.style.height = "14px";
+            arrow.style.position = "relative";
+            arrow.style.top = "2px";
+            if (valueDiff > 0) {
+              arrow.style.transform = "rotate(180deg)";
+            }
+            diffSpan.style.color = "rgb(206, 228, 212)";
+            diffSpan.style.display = "inline-block";
+            diffSpan.appendChild(arrow);
+            diffSpan.appendChild(document.createTextNode(Math.abs(valueDiff).toString()));
+            td.appendChild(diffSpan);
+          }
+        }
         tr.appendChild(td);
         if (tableBody) {
           tableBody.appendChild(tr);
@@ -66,12 +91,12 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
   const tooltips = tooltipEl.querySelectorAll("table");
 
   tooltips.forEach((tip, idx) => {
-    // console.log(tooltip.caretX > positionX + chart.canvas.getBoundingClientRect().left / 2);
+    const width = tooltipEl.querySelectorAll("table")[idx].getBoundingClientRect().width;
     tip.style.top =
       chart.getActiveElements()[idx].element.y - tip.getBoundingClientRect().height / 2 + "px";
     tip.style.left =
       tooltip.caretX > positionX + chart.canvas.getBoundingClientRect().width / 2
-        ? `${-1 * tooltip.width - 15}px`
+        ? `${-1 * width - 20}px`
         : "0";
   });
 
