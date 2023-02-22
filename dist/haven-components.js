@@ -1808,14 +1808,14 @@ function jr(n, t, e) {
   const { property: i, start: s, end: o } = e, r = t.length, { compare: a, between: l, normalize: c } = Wr(i), { start: h, end: d, loop: u, style: f } = Fc(n, t, e), g = [];
   let p = !1, b = null, x, y, w;
   const v = () => l(s, w, x) && a(s, w) !== 0, _ = () => a(o, x) === 0 || l(o, w, x), k = () => p || v(), P = () => !p || _();
-  for (let M = h, C = h; M <= d; ++M)
-    y = t[M % r], !y.skip && (x = c(y[i]), x !== w && (p = l(x, s, o), b === null && k() && (b = a(x, s) === 0 ? M : C), b !== null && P() && (g.push($s({
+  for (let M = h, D = h; M <= d; ++M)
+    y = t[M % r], !y.skip && (x = c(y[i]), x !== w && (p = l(x, s, o), b === null && k() && (b = a(x, s) === 0 ? M : D), b !== null && P() && (g.push($s({
       start: b,
       end: M,
       loop: u,
       count: r,
       style: f
-    })), b = null), C = M, w = x));
+    })), b = null), D = M, w = x));
   return b !== null && g.push($s({
     start: b,
     end: d,
@@ -3263,8 +3263,8 @@ class Ke extends St {
         P.skip = !0;
         continue;
       }
-      const M = this.getParsed(_), C = W(M[f]), E = P[u] = r.getPixelForValue(M[u], _), A = P[f] = o || C ? a.getBasePixel() : a.getPixelForValue(l ? this.applyStack(a, M, l) : M[f], _);
-      P.skip = isNaN(E) || isNaN(A) || C, P.stop = _ > 0 && Math.abs(M[u] - v[u]) > b, p && (P.parsed = M, P.raw = c.data[_]), d && (P.options = h || this.resolveDataElementOptions(_, k.active ? "active" : s)), x || this.updateElement(k, _, P, s), v = M;
+      const M = this.getParsed(_), D = W(M[f]), E = P[u] = r.getPixelForValue(M[u], _), A = P[f] = o || D ? a.getBasePixel() : a.getPixelForValue(l ? this.applyStack(a, M, l) : M[f], _);
+      P.skip = isNaN(E) || isNaN(A) || D, P.stop = _ > 0 && Math.abs(M[u] - v[u]) > b, p && (P.parsed = M, P.raw = c.data[_]), d && (P.options = h || this.resolveDataElementOptions(_, k.active ? "active" : s)), x || this.updateElement(k, _, P, s), v = M;
     }
   }
   getMaxOverflow() {
@@ -3523,8 +3523,8 @@ class Ge extends St {
     const o = s === "reset", { iScale: r, vScale: a, _stacked: l, _dataset: c } = this._cachedMeta, h = this.resolveDataElementOptions(e, s), d = this.getSharedOptions(h), u = this.includeOptions(s, d), f = r.axis, g = a.axis, { spanGaps: p, segment: b } = this.options, x = xe(p) ? p : Number.POSITIVE_INFINITY, y = this.chart._animationsDisabled || o || s === "none";
     let w = e > 0 && this.getParsed(e - 1);
     for (let v = e; v < e + i; ++v) {
-      const _ = t[v], k = this.getParsed(v), P = y ? _ : {}, M = W(k[g]), C = P[f] = r.getPixelForValue(k[f], v), E = P[g] = o || M ? a.getBasePixel() : a.getPixelForValue(l ? this.applyStack(a, k, l) : k[g], v);
-      P.skip = isNaN(C) || isNaN(E) || M, P.stop = v > 0 && Math.abs(k[f] - w[f]) > x, b && (P.parsed = k, P.raw = c.data[v]), u && (P.options = d || this.resolveDataElementOptions(v, _.active ? "active" : s)), y || this.updateElement(_, v, P, s), w = k;
+      const _ = t[v], k = this.getParsed(v), P = y ? _ : {}, M = W(k[g]), D = P[f] = r.getPixelForValue(k[f], v), E = P[g] = o || M ? a.getBasePixel() : a.getPixelForValue(l ? this.applyStack(a, k, l) : k[g], v);
+      P.skip = isNaN(D) || isNaN(E) || M, P.stop = v > 0 && Math.abs(k[f] - w[f]) > x, b && (P.parsed = k, P.raw = c.data[v]), u && (P.options = d || this.resolveDataElementOptions(v, _.active ? "active" : s)), y || this.updateElement(_, v, P, s), w = k;
     }
     this.updateSharedOptions(d, s, h);
   }
@@ -4662,11 +4662,11 @@ class ce extends ct {
     const e = this.axis, i = this.chart, s = this.options, { grid: o, position: r, border: a } = s, l = o.offset, c = this.isHorizontal(), d = this.ticks.length + (l ? 1 : 0), u = Re(o), f = [], g = a.setContext(this.getContext()), p = g.display ? g.width : 0, b = p / 2, x = function(H) {
       return Qt(i, H, p);
     };
-    let y, w, v, _, k, P, M, C, E, A, L, j;
+    let y, w, v, _, k, P, M, D, E, A, L, j;
     if (r === "top")
-      y = x(this.bottom), P = this.bottom - u, C = y - b, A = x(t.top) + b, j = t.bottom;
+      y = x(this.bottom), P = this.bottom - u, D = y - b, A = x(t.top) + b, j = t.bottom;
     else if (r === "bottom")
-      y = x(this.top), A = t.top, j = x(t.bottom) - b, P = y + b, C = this.top + u;
+      y = x(this.top), A = t.top, j = x(t.bottom) - b, P = y + b, D = this.top + u;
     else if (r === "left")
       y = x(this.right), k = this.right - u, M = y - b, E = x(t.left) + b, L = t.right;
     else if (r === "right")
@@ -4678,7 +4678,7 @@ class ce extends ct {
         const H = Object.keys(r)[0], X = r[H];
         y = x(this.chart.scales[H].getPixelForValue(X));
       }
-      A = t.top, j = t.bottom, P = y + b, C = P + u;
+      A = t.top, j = t.bottom, P = y + b, D = P + u;
     } else if (e === "y") {
       if (r === "center")
         y = x((t.left + t.right) / 2);
@@ -4691,11 +4691,11 @@ class ce extends ct {
     const G = R(s.ticks.maxTicksLimit, d), F = Math.max(1, Math.ceil(d / G));
     for (w = 0; w < d; w += F) {
       const H = this.getContext(w), X = o.setContext(H), lt = a.setContext(H), Q = X.lineWidth, xt = X.color, Mt = lt.dash || [], yt = lt.dashOffset, wt = X.tickWidth, kt = X.tickColor, Jt = X.tickBorderDash || [], Ot = X.tickBorderDashOffset;
-      v = Uh(this, w, l), v !== void 0 && (_ = Qt(i, v, Q), c ? k = M = E = L = _ : P = C = A = j = _, f.push({
+      v = Uh(this, w, l), v !== void 0 && (_ = Qt(i, v, Q), c ? k = M = E = L = _ : P = D = A = j = _, f.push({
         tx1: k,
         ty1: P,
         tx2: M,
-        ty2: C,
+        ty2: D,
         x1: E,
         y1: A,
         x2: L,
@@ -4714,7 +4714,7 @@ class ce extends ct {
   }
   _computeLabelItems(t) {
     const e = this.axis, i = this.options, { position: s, ticks: o } = i, r = this.isHorizontal(), a = this.ticks, { align: l, crossAlign: c, padding: h, mirror: d } = o, u = Re(i.grid), f = u + h, g = d ? -h : f, p = -ot(this.labelRotation), b = [];
-    let x, y, w, v, _, k, P, M, C, E, A, L, j = "middle";
+    let x, y, w, v, _, k, P, M, D, E, A, L, j = "middle";
     if (s === "top")
       k = this.bottom - g, P = this._getXAxisLabelAlignment();
     else if (s === "bottom")
@@ -4747,7 +4747,7 @@ class ce extends ct {
     for (x = 0, y = a.length; x < y; ++x) {
       w = a[x], v = w.label;
       const F = o.setContext(this.getContext(x));
-      M = this.getPixelForTick(x) + o.labelOffset, C = this._resolveTickFontOptions(x), E = C.lineHeight, A = $(v) ? v.length : 1;
+      M = this.getPixelForTick(x) + o.labelOffset, D = this._resolveTickFontOptions(x), E = D.lineHeight, A = $(v) ? v.length : 1;
       const H = A / 2, X = F.color, lt = F.textStrokeColor, Q = F.textStrokeWidth;
       let xt = P;
       r ? (_ = M, P === "inner" && (x === y - 1 ? xt = this.options.reverse ? "left" : "right" : x === 0 ? xt = this.options.reverse ? "right" : "left" : xt = "center"), s === "top" ? c === "near" || p !== 0 ? L = -A * E + E / 2 : c === "center" ? L = -G.highest.height / 2 - H * E + E : L = -G.highest.height + E / 2 : c === "near" || p !== 0 ? L = E / 2 : c === "center" ? L = G.highest.height / 2 - H * E : L = G.highest.height - A * E, d && (L *= -1), p !== 0 && !F.showLabelBackdrop && (_ += E / 2 * Math.sin(p))) : (k = M, L = (1 - A) * E / 2);
@@ -4781,7 +4781,7 @@ class ce extends ct {
       }
       b.push({
         label: v,
-        font: C,
+        font: D,
         textOffset: L,
         options: {
           rotation: p,
@@ -5977,10 +5977,10 @@ function qn(n, t, e, i, s, o) {
     const F = h > 0 ? h - i : 0, H = d > 0 ? d - i : 0, X = (F + H) / 2, lt = X !== 0 ? g * X / (X + i) : g;
     f = (g - lt) / 2;
   }
-  const p = Math.max(1e-3, g * d - e / N) / d, b = (g - p) / 2, x = l + b + f, y = s - b - f, { outerStart: w, outerEnd: v, innerStart: _, innerEnd: k } = Md(t, u, d, y - x), P = d - w, M = d - v, C = x + w / P, E = y - v / M, A = u + _, L = u + k, j = x + _ / A, G = y - k / L;
+  const p = Math.max(1e-3, g * d - e / N) / d, b = (g - p) / 2, x = l + b + f, y = s - b - f, { outerStart: w, outerEnd: v, innerStart: _, innerEnd: k } = Md(t, u, d, y - x), P = d - w, M = d - v, D = x + w / P, E = y - v / M, A = u + _, L = u + k, j = x + _ / A, G = y - k / L;
   if (n.beginPath(), o) {
-    const F = (C + E) / 2;
-    if (n.arc(r, a, d, C, F), n.arc(r, a, d, F, E), v > 0) {
+    const F = (D + E) / 2;
+    if (n.arc(r, a, d, D, F), n.arc(r, a, d, F, E), v > 0) {
       const Q = ge(M, E, r, a);
       n.arc(Q.x, Q.y, v, E, y + tt);
     }
@@ -5996,12 +5996,12 @@ function qn(n, t, e, i, s, o) {
     }
     const lt = ge(P, x, r, a);
     if (n.lineTo(lt.x, lt.y), w > 0) {
-      const Q = ge(P, C, r, a);
-      n.arc(Q.x, Q.y, w, x - tt, C);
+      const Q = ge(P, D, r, a);
+      n.arc(Q.x, Q.y, w, x - tt, D);
     }
   } else {
     n.moveTo(r, a);
-    const F = Math.cos(C) * d + r, H = Math.sin(C) * d + a;
+    const F = Math.cos(D) * d + r, H = Math.sin(D) * d + a;
     n.lineTo(F, H);
     const X = Math.cos(E) * d + r, lt = Math.sin(E) * d + a;
     n.lineTo(X, lt);
@@ -6509,9 +6509,9 @@ function Ud(n, t, e, i, s) {
     for (y = w; y < v; y++)
       b += n[y].x, x += n[y].y;
     b /= _, x /= _;
-    const k = Math.floor(d * a) + 1 + t, P = Math.min(Math.floor((d + 1) * a) + 1, e) + t, { x: M, y: C } = n[h];
+    const k = Math.floor(d * a) + 1 + t, P = Math.min(Math.floor((d + 1) * a) + 1, e) + t, { x: M, y: D } = n[h];
     for (f = g = -1, y = k; y < P; y++)
-      g = 0.5 * Math.abs((M - b) * (n[y].y - C) - (M - n[y].x) * (x - C)), g > f && (f = g, u = n[y], p = y);
+      g = 0.5 * Math.abs((M - b) * (n[y].y - D) - (M - n[y].x) * (x - D)), g > f && (f = g, u = n[y], p = y);
     r[l++] = u, h = p;
   }
   return r[l++] = n[c], r;
@@ -7089,13 +7089,13 @@ class Eo extends ct {
       if (isNaN(g) || g <= 0 || isNaN(p) || p < 0)
         return;
       s.save();
-      const C = R(M.lineWidth, 1);
-      if (s.fillStyle = R(M.fillStyle, a), s.lineCap = R(M.lineCap, "butt"), s.lineDashOffset = R(M.lineDashOffset, 0), s.lineJoin = R(M.lineJoin, "miter"), s.lineWidth = C, s.strokeStyle = R(M.strokeStyle, a), s.setLineDash(R(M.lineDash, [])), r.usePointStyle) {
+      const D = R(M.lineWidth, 1);
+      if (s.fillStyle = R(M.fillStyle, a), s.lineCap = R(M.lineCap, "butt"), s.lineDashOffset = R(M.lineDashOffset, 0), s.lineJoin = R(M.lineJoin, "miter"), s.lineWidth = D, s.strokeStyle = R(M.strokeStyle, a), s.setLineDash(R(M.lineDash, [])), r.usePointStyle) {
         const E = {
           radius: p * Math.SQRT2 / 2,
           pointStyle: M.pointStyle,
           rotation: M.rotation,
-          borderWidth: C
+          borderWidth: D
         }, A = l.xPlus(k, g / 2), L = P + u;
         Dr(s, E, A, L, r.pointStyleWidth && g);
       } else {
@@ -7106,7 +7106,7 @@ class Eo extends ct {
           w: g,
           h: p,
           radius: L
-        }) : s.rect(A, E, g, p), s.fill(), C !== 0 && s.stroke();
+        }) : s.rect(A, E, g, p), s.fill(), D !== 0 && s.stroke();
       }
       s.restore();
     }, y = function(k, P, M) {
@@ -7127,11 +7127,11 @@ class Eo extends ct {
     const _ = b + h;
     this.legendItems.forEach((k, P) => {
       s.strokeStyle = k.fontColor, s.fillStyle = k.fontColor;
-      const M = s.measureText(k.text).width, C = l.textAlign(k.textAlign || (k.textAlign = r.textAlign)), E = g + u + M;
+      const M = s.measureText(k.text).width, D = l.textAlign(k.textAlign || (k.textAlign = r.textAlign)), E = g + u + M;
       let A = f.x, L = f.y;
       l.setWidth(this.width), w ? P > 0 && A + E + h > this.right && (L = f.y += _, f.line++, A = f.x = ht(o, this.left + h, this.right - i[f.line])) : P > 0 && L + _ > this.bottom && (A = f.x = A + e[f.line].width + h, f.line++, L = f.y = ht(o, this.top + v + h, this.bottom - e[f.line].height));
       const j = l.x(A);
-      if (x(j, L, k), A = Nl(C, A + g + u, w ? A + E : this.right, t.rtl), y(l.x(A), L, k), w)
+      if (x(j, L, k), A = Nl(D, A + g + u, w ? A + E : this.right, t.rtl), y(l.x(A), L, k), w)
         f.x += E + h;
       else if (typeof k.text != "string") {
         const G = c.lineHeight;
@@ -8054,7 +8054,7 @@ O(Gn, "id", "category"), O(Gn, "defaults", {
 });
 function Tu(n, t) {
   const e = [], { bounds: s, step: o, min: r, max: a, precision: l, count: c, maxTicks: h, maxDigits: d, includeBounds: u } = n, f = o || 1, g = h - 1, { min: p, max: b } = t, x = !W(r), y = !W(a), w = !W(c), v = (b - p) / (d + 1);
-  let _ = Ts((b - p) / g / f) * f, k, P, M, C;
+  let _ = Ts((b - p) / g / f) * f, k, P, M, D;
   if (_ < 1e-14 && !x && !y)
     return [
       {
@@ -8064,13 +8064,13 @@ function Tu(n, t) {
         value: b
       }
     ];
-  C = Math.ceil(b / _) - Math.floor(p / _), C > g && (_ = Ts(C * _ / g / f) * f), W(l) || (k = Math.pow(10, l), _ = Math.ceil(_ * k) / k), s === "ticks" ? (P = Math.floor(p / _) * _, M = Math.ceil(b / _) * _) : (P = p, M = b), x && y && o && Il((a - r) / o, _ / 1e3) ? (C = Math.round(Math.min((a - r) / _, h)), _ = (a - r) / C, P = r, M = a) : w ? (P = x ? r : P, M = y ? a : M, C = c - 1, _ = (M - P) / C) : (C = (M - P) / _, He(C, Math.round(C), _ / 1e3) ? C = Math.round(C) : C = Math.ceil(C));
+  D = Math.ceil(b / _) - Math.floor(p / _), D > g && (_ = Ts(D * _ / g / f) * f), W(l) || (k = Math.pow(10, l), _ = Math.ceil(_ * k) / k), s === "ticks" ? (P = Math.floor(p / _) * _, M = Math.ceil(b / _) * _) : (P = p, M = b), x && y && o && Il((a - r) / o, _ / 1e3) ? (D = Math.round(Math.min((a - r) / _, h)), _ = (a - r) / D, P = r, M = a) : w ? (P = x ? r : P, M = y ? a : M, D = c - 1, _ = (M - P) / D) : (D = (M - P) / _, He(D, Math.round(D), _ / 1e3) ? D = Math.round(D) : D = Math.ceil(D));
   const E = Math.max(Ls(_), Ls(P));
   k = Math.pow(10, W(l) ? E : l), P = Math.round(P * k) / k, M = Math.round(M * k) / k;
   let A = 0;
   for (x && (u && P !== r ? (e.push({
     value: r
-  }), P < r && A++, He(Math.round((P + A * _) * k) / k, r, Bo(r, v, n)) && A++) : P < r && A++); A < C; ++A)
+  }), P < r && A++, He(Math.round((P + A * _) * k) / k, r, Bo(r, v, n)) && A++) : P < r && A++); A < D; ++A)
     e.push({
       value: Math.round((P + A * _) * k) / k
     });
@@ -10175,32 +10175,32 @@ function ng() {
     var x = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
     function y(m) {
       {
-        for (var S = arguments.length, D = new Array(S > 1 ? S - 1 : 0), T = 1; T < S; T++)
-          D[T - 1] = arguments[T];
-        w("error", m, D);
+        for (var S = arguments.length, C = new Array(S > 1 ? S - 1 : 0), T = 1; T < S; T++)
+          C[T - 1] = arguments[T];
+        w("error", m, C);
       }
     }
-    function w(m, S, D) {
+    function w(m, S, C) {
       {
         var T = x.ReactDebugCurrentFrame, V = T.getStackAddendum();
-        V !== "" && (S += "%s", D = D.concat([V]));
-        var U = D.map(function(B) {
+        V !== "" && (S += "%s", C = C.concat([V]));
+        var U = C.map(function(B) {
           return String(B);
         });
         U.unshift("Warning: " + S), Function.prototype.apply.call(console[m], console, U);
       }
     }
-    var v = !1, _ = !1, k = !1, P = !1, M = !1, C;
-    C = Symbol.for("react.module.reference");
+    var v = !1, _ = !1, k = !1, P = !1, M = !1, D;
+    D = Symbol.for("react.module.reference");
     function E(m) {
-      return !!(typeof m == "string" || typeof m == "function" || m === i || m === o || M || m === s || m === c || m === h || P || m === f || v || _ || k || typeof m == "object" && m !== null && (m.$$typeof === u || m.$$typeof === d || m.$$typeof === r || m.$$typeof === a || m.$$typeof === l || m.$$typeof === C || m.getModuleId !== void 0));
+      return !!(typeof m == "string" || typeof m == "function" || m === i || m === o || M || m === s || m === c || m === h || P || m === f || v || _ || k || typeof m == "object" && m !== null && (m.$$typeof === u || m.$$typeof === d || m.$$typeof === r || m.$$typeof === a || m.$$typeof === l || m.$$typeof === D || m.getModuleId !== void 0));
     }
-    function A(m, S, D) {
+    function A(m, S, C) {
       var T = m.displayName;
       if (T)
         return T;
       var V = S.displayName || S.name || "";
-      return V !== "" ? D + "(" + V + ")" : D;
+      return V !== "" ? C + "(" + V + ")" : C;
     }
     function L(m) {
       return m.displayName || "Context";
@@ -10232,8 +10232,8 @@ function ng() {
             var S = m;
             return L(S) + ".Consumer";
           case r:
-            var D = m;
-            return L(D._context) + ".Provider";
+            var C = m;
+            return L(C._context) + ".Provider";
           case l:
             return A(m, m.render, "ForwardRef");
           case d:
@@ -10313,7 +10313,7 @@ function ng() {
       }
     }
     var Ot = x.ReactCurrentDispatcher, oi;
-    function mn(m, S, D) {
+    function mn(m, S, C) {
       {
         if (oi === void 0)
           try {
@@ -10335,9 +10335,9 @@ function ng() {
       if (!m || ri)
         return "";
       {
-        var D = bn.get(m);
-        if (D !== void 0)
-          return D;
+        var C = bn.get(m);
+        if (C !== void 0)
+          return C;
       }
       var T;
       ri = !0;
@@ -10402,14 +10402,14 @@ function ng() {
       var ue = m ? m.displayName || m.name : "", Ms = ue ? mn(ue) : "";
       return typeof m == "function" && bn.set(m, Ms), Ms;
     }
-    function Ta(m, S, D) {
+    function Ta(m, S, C) {
       return ds(m, !1);
     }
     function La(m) {
       var S = m.prototype;
       return !!(S && S.isReactComponent);
     }
-    function xn(m, S, D) {
+    function xn(m, S, C) {
       if (m == null)
         return "";
       if (typeof m == "function")
@@ -10427,11 +10427,11 @@ function ng() {
           case l:
             return Ta(m.render);
           case d:
-            return xn(m.type, S, D);
+            return xn(m.type, S, C);
           case u: {
             var T = m, V = T._payload, U = T._init;
             try {
-              return xn(U(V), S, D);
+              return xn(U(V), S, C);
             } catch {
             }
           }
@@ -10441,12 +10441,12 @@ function ng() {
     var yn = Object.prototype.hasOwnProperty, us = {}, fs = x.ReactDebugCurrentFrame;
     function _n(m) {
       if (m) {
-        var S = m._owner, D = xn(m.type, m._source, S ? S.type : null);
-        fs.setExtraStackFrame(D);
+        var S = m._owner, C = xn(m.type, m._source, S ? S.type : null);
+        fs.setExtraStackFrame(C);
       } else
         fs.setExtraStackFrame(null);
     }
-    function Ia(m, S, D, T, V) {
+    function Ia(m, S, C, T, V) {
       {
         var U = Function.call.bind(yn);
         for (var B in m)
@@ -10454,14 +10454,14 @@ function ng() {
             var z = void 0;
             try {
               if (typeof m[B] != "function") {
-                var ut = Error((T || "React class") + ": " + D + " type `" + B + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof m[B] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+                var ut = Error((T || "React class") + ": " + C + " type `" + B + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof m[B] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
                 throw ut.name = "Invariant Violation", ut;
               }
-              z = m[B](S, B, T, D, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
+              z = m[B](S, B, T, C, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
             } catch (nt) {
               z = nt;
             }
-            z && !(z instanceof Error) && (_n(V), y("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", T || "React class", D, B, typeof z), _n(null)), z instanceof Error && !(z.message in us) && (us[z.message] = !0, _n(V), y("Failed %s type: %s", D, z.message), _n(null));
+            z && !(z instanceof Error) && (_n(V), y("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", T || "React class", C, B, typeof z), _n(null)), z instanceof Error && !(z.message in us) && (us[z.message] = !0, _n(V), y("Failed %s type: %s", C, z.message), _n(null));
           }
       }
     }
@@ -10471,8 +10471,8 @@ function ng() {
     }
     function za(m) {
       {
-        var S = typeof Symbol == "function" && Symbol.toStringTag, D = S && m[Symbol.toStringTag] || m.constructor.name || "Object";
-        return D;
+        var S = typeof Symbol == "function" && Symbol.toStringTag, C = S && m[Symbol.toStringTag] || m.constructor.name || "Object";
+        return C;
       }
     }
     function Ba(m) {
@@ -10514,38 +10514,38 @@ function ng() {
     }
     function Na(m, S) {
       if (typeof m.ref == "string" && De.current && S && De.current.stateNode !== S) {
-        var D = j(De.current.type);
-        li[D] || (y('Component "%s" contains the string ref "%s". Support for string refs will be removed in a future major release. This case cannot be automatically converted to an arrow function. We ask you to manually fix this case by using useRef() or createRef() instead. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-string-ref', j(De.current.type), m.ref), li[D] = !0);
+        var C = j(De.current.type);
+        li[C] || (y('Component "%s" contains the string ref "%s". Support for string refs will be removed in a future major release. This case cannot be automatically converted to an arrow function. We ask you to manually fix this case by using useRef() or createRef() instead. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-string-ref', j(De.current.type), m.ref), li[C] = !0);
       }
     }
     function Ha(m, S) {
       {
-        var D = function() {
+        var C = function() {
           ms || (ms = !0, y("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", S));
         };
-        D.isReactWarning = !0, Object.defineProperty(m, "key", {
-          get: D,
+        C.isReactWarning = !0, Object.defineProperty(m, "key", {
+          get: C,
           configurable: !0
         });
       }
     }
     function Ya(m, S) {
       {
-        var D = function() {
+        var C = function() {
           bs || (bs = !0, y("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", S));
         };
-        D.isReactWarning = !0, Object.defineProperty(m, "ref", {
-          get: D,
+        C.isReactWarning = !0, Object.defineProperty(m, "ref", {
+          get: C,
           configurable: !0
         });
       }
     }
-    var $a = function(m, S, D, T, V, U, B) {
+    var $a = function(m, S, C, T, V, U, B) {
       var z = {
         $$typeof: t,
         type: m,
         key: S,
-        ref: D,
+        ref: C,
         props: B,
         _owner: U
       };
@@ -10566,10 +10566,10 @@ function ng() {
         value: V
       }), Object.freeze && (Object.freeze(z.props), Object.freeze(z)), z;
     };
-    function Xa(m, S, D, T, V) {
+    function Xa(m, S, C, T, V) {
       {
         var U, B = {}, z = null, ut = null;
-        D !== void 0 && (ps(D), z = "" + D), Va(S) && (ps(S.key), z = "" + S.key), ja(S) && (ut = S.ref, Na(S, V));
+        C !== void 0 && (ps(C), z = "" + C), Va(S) && (ps(S.key), z = "" + S.key), ja(S) && (ut = S.ref, Na(S, V));
         for (U in S)
           yn.call(S, U) && !Wa.hasOwnProperty(U) && (B[U] = S[U]);
         if (m && m.defaultProps) {
@@ -10587,8 +10587,8 @@ function ng() {
     var ci = x.ReactCurrentOwner, xs = x.ReactDebugCurrentFrame;
     function de(m) {
       if (m) {
-        var S = m._owner, D = xn(m.type, m._source, S ? S.type : null);
-        xs.setExtraStackFrame(D);
+        var S = m._owner, C = xn(m.type, m._source, S ? S.type : null);
+        xs.setExtraStackFrame(C);
       } else
         xs.setExtraStackFrame(null);
     }
@@ -10612,10 +10612,10 @@ Check the render method of \`` + m + "`.";
     function Ua(m) {
       {
         if (m !== void 0) {
-          var S = m.fileName.replace(/^.*[\\\/]/, ""), D = m.lineNumber;
+          var S = m.fileName.replace(/^.*[\\\/]/, ""), C = m.lineNumber;
           return `
 
-Check your code at ` + S + ":" + D + ".";
+Check your code at ` + S + ":" + C + ".";
         }
         return "";
       }
@@ -10625,10 +10625,10 @@ Check your code at ` + S + ":" + D + ".";
       {
         var S = ys();
         if (!S) {
-          var D = typeof m == "string" ? m : m.displayName || m.name;
-          D && (S = `
+          var C = typeof m == "string" ? m : m.displayName || m.name;
+          C && (S = `
 
-Check the top-level render call using <` + D + ">.");
+Check the top-level render call using <` + C + ">.");
         }
         return S;
       }
@@ -10638,12 +10638,12 @@ Check the top-level render call using <` + D + ">.");
         if (!m._store || m._store.validated || m.key != null)
           return;
         m._store.validated = !0;
-        var D = Ka(S);
-        if (_s[D])
+        var C = Ka(S);
+        if (_s[C])
           return;
-        _s[D] = !0;
+        _s[C] = !0;
         var T = "";
-        m && m._owner && m._owner !== ci.current && (T = " It was passed a child from " + j(m._owner.type) + "."), de(m), y('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', D, T), de(null);
+        m && m._owner && m._owner !== ci.current && (T = " It was passed a child from " + j(m._owner.type) + "."), de(m), y('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', C, T), de(null);
       }
     }
     function ws(m, S) {
@@ -10651,8 +10651,8 @@ Check the top-level render call using <` + D + ">.");
         if (typeof m != "object")
           return;
         if (ai(m))
-          for (var D = 0; D < m.length; D++) {
-            var T = m[D];
+          for (var C = 0; C < m.length; C++) {
+            var T = m[C];
             di(T) && vs(T, S);
           }
         else if (di(m))
@@ -10670,16 +10670,16 @@ Check the top-level render call using <` + D + ">.");
         var S = m.type;
         if (S == null || typeof S == "string")
           return;
-        var D;
+        var C;
         if (typeof S == "function")
-          D = S.propTypes;
+          C = S.propTypes;
         else if (typeof S == "object" && (S.$$typeof === l || S.$$typeof === d))
-          D = S.propTypes;
+          C = S.propTypes;
         else
           return;
-        if (D) {
+        if (C) {
           var T = j(S);
-          Ia(D, m.props, "prop", T, m);
+          Ia(C, m.props, "prop", T, m);
         } else if (S.PropTypes !== void 0 && !hi) {
           hi = !0;
           var V = j(S);
@@ -10690,8 +10690,8 @@ Check the top-level render call using <` + D + ">.");
     }
     function Ga(m) {
       {
-        for (var S = Object.keys(m.props), D = 0; D < S.length; D++) {
-          var T = S[D];
+        for (var S = Object.keys(m.props), C = 0; C < S.length; C++) {
+          var T = S[C];
           if (T !== "children" && T !== "key") {
             de(m), y("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", T), de(null);
             break;
@@ -10700,7 +10700,7 @@ Check the top-level render call using <` + D + ">.");
         m.ref !== null && (de(m), y("Invalid attribute `ref` supplied to `React.Fragment`."), de(null));
       }
     }
-    function Ss(m, S, D, T, V, U) {
+    function Ss(m, S, C, T, V, U) {
       {
         var B = E(m);
         if (!B) {
@@ -10711,7 +10711,7 @@ Check the top-level render call using <` + D + ">.");
           var nt;
           m === null ? nt = "null" : ai(m) ? nt = "array" : m !== void 0 && m.$$typeof === t ? (nt = "<" + (j(m.type) || "Unknown") + " />", z = " Did you accidentally export a JSX literal instead of a component?") : nt = typeof m, y("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", nt, z);
         }
-        var st = Xa(m, S, D, V, U);
+        var st = Xa(m, S, C, V, U);
         if (st == null)
           return st;
         if (B) {
@@ -10730,11 +10730,11 @@ Check the top-level render call using <` + D + ">.");
         return m === i ? Ga(st) : qa(st), st;
       }
     }
-    function Ja(m, S, D) {
-      return Ss(m, S, D, !0);
+    function Ja(m, S, C) {
+      return Ss(m, S, C, !0);
     }
-    function Za(m, S, D) {
-      return Ss(m, S, D, !1);
+    function Za(m, S, C) {
+      return Ss(m, S, C, !1);
     }
     var Qa = Za, tl = Ja;
     Ie.Fragment = i, Ie.jsx = Qa, Ie.jsxs = tl;
@@ -10837,17 +10837,18 @@ Gt("scatter", Ge);
 const cg = (n) => {
   var e, i;
   let t = (e = n.canvas.parentNode) == null ? void 0 : e.querySelector("div");
-  return t || (t = document.createElement("div"), t.id = "chartjs-tooltip", t.style.borderRadius = "3px", t.style.color = "white", t.style.opacity = "1", t.style.pointerEvents = "none", t.style.position = "absolute", t.style.top = "0", t.style.transition = "all .1s ease", (i = n.canvas.parentNode) == null || i.appendChild(t)), t;
-}, hg = (n) => {
+  return t || (t = document.createElement("div"), t.id = "chartjs-tooltip", t.style.borderRadius = "3px", t.style.color = "white", t.style.opacity = "1", t.style.pointerEvents = "none", t.style.position = "absolute", t.style.top = "0", t.style.transition = "all .2s ease-out", t.style.transitionDelay = ".1s", t.style.height = "100%", (i = n.canvas.parentNode) == null || i.appendChild(t)), t;
+}, hg = (n, t) => {
+  const e = document.createElement("span"), i = document.createElement("img");
+  i.src = "/arrow.png", i.style.width = "14px", i.style.height = "14px", i.style.position = "relative", i.style.top = "2px", t > 0 && (i.style.transform = "rotate(180deg)"), e.style.color = "rgb(206, 228, 212)", e.style.display = "inline-block", e.appendChild(i), e.appendChild(document.createTextNode(Math.abs(t).toString())), n.appendChild(e);
+}, dg = (n) => {
   const {
     chart: t,
     tooltip: e
   } = n, i = cg(t);
-  if (e.opacity === 0) {
-    i.style.opacity = "0";
-    return;
-  }
-  e.body && (Array.from(i.children).forEach((l) => l.remove()), e.body.forEach((l, c) => {
+  t.getActiveElements().length === 0 ? i.style.opacity = "0" : i.style.opacity = "1", e.body && (Array.from(i.children).forEach((l) => l.remove()), e.body.forEach((l, c) => {
+    if (!t.getActiveElements()[c] && e.opacity === 0)
+      return;
     const h = l.lines, d = document.createElement("table");
     d.style.borderRadius = "2px", d.style.marginBottom = "20px", d.style.position = "absolute", i.appendChild(d);
     const u = document.createElement("tbody");
@@ -10859,10 +10860,7 @@ const cg = (n) => {
       const y = t.getActiveElements()[c].index, w = t.data.datasets[c].data.at(y), v = t.data.datasets[c].data.at(y - 1);
       if (![w, v].includes(null)) {
         const P = (w || 0) - (v || 0);
-        if (y > -1 && g === 1 && P !== 0) {
-          const M = document.createElement("span"), C = document.createElement("img");
-          C.src = "/arrow.png", C.style.width = "14px", C.style.height = "14px", C.style.position = "relative", C.style.top = "2px", P > 0 && (C.style.transform = "rotate(180deg)"), M.style.color = "rgb(206, 228, 212)", M.style.display = "inline-block", M.appendChild(C), M.appendChild(document.createTextNode(Math.abs(P).toString())), x.appendChild(M);
-        }
+        y > -1 && g === 1 && (P === 0 || hg(x, P));
       }
       b.appendChild(x), u && u.appendChild(b), d.appendChild(u);
     });
@@ -10870,15 +10868,15 @@ const cg = (n) => {
   const {
     offsetLeft: s,
     offsetTop: o
-  } = t.canvas;
-  i.querySelectorAll("table").forEach((l, c) => {
-    const h = i.querySelectorAll("table")[c].getBoundingClientRect().width;
+  } = t.canvas, r = i.querySelectorAll("table");
+  r.forEach((l, c) => {
+    const h = r[c].getBoundingClientRect().width;
     l.style.top = t.getActiveElements()[c].element.y - l.getBoundingClientRect().height / 2 + "px", l.style.left = e.caretX > s + t.canvas.getBoundingClientRect().width / 2 ? `${-1 * h - 20}px` : "0";
-  }), Array.from(i.querySelectorAll("table")).forEach((l, c) => {
+  }), Array.from(r).forEach((l, c) => {
     l.style.backgroundColor = t.getActiveElements()[c].element.options.borderColor;
-  });
+  }), i.style.left = s + e.caretX + 10 + "px";
   const a = et(e.options.bodyFont);
-  i.style.opacity = "1", i.style.left = s + e.caretX + 10 + "px", i.style.height = "100%", i.style.fontFamily = a.family, i.style.fontSize = `${a.size}px` || "14px", i.style.lineHeight = `${a.lineHeight}px` || "120%", i.style.padding = e.options.padding + "px " + e.options.padding + "px";
+  i.style.fontFamily = a.family, i.style.fontSize = `${a.size}px` || "14px", i.style.lineHeight = `${a.lineHeight}px` || "120%", i.style.padding = e.options.padding + "px " + e.options.padding + "px";
 }, pe = {
   aspectRatio: 1.33,
   mouseLine: {
@@ -10940,7 +10938,7 @@ const cg = (n) => {
       caretSize: 0,
       displayColors: !1,
       enabled: !1,
-      external: hg
+      external: dg
     }
   },
   scales: {
@@ -10966,7 +10964,7 @@ const cg = (n) => {
       type: "linear"
     }
   }
-}, dg = {
+}, ug = {
   id: "hoverLine",
   afterEvent: function(n, { event: t }) {
     const e = n.options, i = n.chartArea;
@@ -10982,7 +10980,7 @@ const cg = (n) => {
   }
 };
 bt.register(Gn, Zn, Je, zt, ha, ua, ca, aa, Qf);
-const ug = ({
+const fg = ({
   data: n,
   options: t,
   chartTheme: e
@@ -10995,12 +10993,12 @@ const ug = ({
   };
   const s = {
     labels: n.labels,
-    datasets: [...n.datasets.map((M, C) => {
+    datasets: [...n.datasets.map((M, D) => {
       var E, A, L, j, G, F, H, X, lt, Q, xt, Mt, yt, wt, kt;
       return {
-        backgroundColor: ((E = e == null ? void 0 : e.colors) == null ? void 0 : E[C].fill) || ((L = (A = t == null ? void 0 : t.elements) == null ? void 0 : A.line) == null ? void 0 : L.backgroundColor) || ((G = (j = pe.elements) == null ? void 0 : j.line) == null ? void 0 : G.backgroundColor),
-        borderColor: ((F = e == null ? void 0 : e.colors) == null ? void 0 : F[C].line) || ((X = (H = t == null ? void 0 : t.elements) == null ? void 0 : H.line) == null ? void 0 : X.borderColor) || ((Q = (lt = pe.elements) == null ? void 0 : lt.line) == null ? void 0 : Q.borderColor),
-        pointBackgroundColor: ((xt = e == null ? void 0 : e.colors) == null ? void 0 : xt[C].point) || ((yt = (Mt = t == null ? void 0 : t.elements) == null ? void 0 : Mt.point) == null ? void 0 : yt.backgroundColor) || ((kt = (wt = pe.elements) == null ? void 0 : wt.point) == null ? void 0 : kt.backgroundColor),
+        backgroundColor: ((E = e == null ? void 0 : e.colors) == null ? void 0 : E[D].fill) || ((L = (A = t == null ? void 0 : t.elements) == null ? void 0 : A.line) == null ? void 0 : L.backgroundColor) || ((G = (j = pe.elements) == null ? void 0 : j.line) == null ? void 0 : G.backgroundColor),
+        borderColor: ((F = e == null ? void 0 : e.colors) == null ? void 0 : F[D].line) || ((X = (H = t == null ? void 0 : t.elements) == null ? void 0 : H.line) == null ? void 0 : X.borderColor) || ((Q = (lt = pe.elements) == null ? void 0 : lt.line) == null ? void 0 : Q.borderColor),
+        pointBackgroundColor: ((xt = e == null ? void 0 : e.colors) == null ? void 0 : xt[D].point) || ((yt = (Mt = t == null ? void 0 : t.elements) == null ? void 0 : Mt.point) == null ? void 0 : yt.backgroundColor) || ((kt = (wt = pe.elements) == null ? void 0 : wt.point) == null ? void 0 : kt.backgroundColor),
         ...M
       };
     })]
@@ -11035,15 +11033,15 @@ const ug = ({
       datasetIndex: 1,
       index: a
     }]);
-    const C = M.options, E = M.getActiveElements();
-    C.mouseLine && E[0] && (C.mouseLine.x = E[0].element.x), M.update();
+    const D = M.options, E = M.getActiveElements();
+    D.mouseLine && E[0] && (D.mouseLine.x = E[0].element.x), M.update();
   }, [a]);
   const c = function(M) {
     return M.length ? M[0].index : -1;
-  }, h = function(M, C) {
+  }, h = function(M, D) {
     const E = M.canvas, A = E.getBoundingClientRect(), L = new MouseEvent("click", {
-      clientX: A.left + C.x,
-      clientY: A.top + C.y,
+      clientX: A.left + D.x,
+      clientY: A.top + D.y,
       cancelable: !0,
       bubbles: !0
     });
@@ -11051,19 +11049,19 @@ const ug = ({
   }, d = ({
     code: M
   }) => {
-    const C = i.current;
-    if (C == null)
+    const D = i.current;
+    if (D == null)
       return;
-    const E = C.getActiveElements();
+    const E = D.getActiveElements();
     if (M === "ArrowRight") {
-      const A = c(E) + 1, L = A === C.data.datasets[0].data.length ? 0 : A;
+      const A = c(E) + 1, L = A === D.data.datasets[0].data.length ? 0 : A;
       l(L);
     } else if (M === "ArrowLeft") {
-      const A = c(E) - 1, L = A < 0 ? C.data.datasets[0].data.length - 1 : A;
+      const A = c(E) - 1, L = A < 0 ? D.data.datasets[0].data.length - 1 : A;
       l(L);
     } else if (M === "Enter" && E.length) {
-      const A = E[0], j = C.getDatasetMeta(A.datasetIndex).data[A.index];
-      h(C, j);
+      const A = E[0], j = D.getDatasetMeta(A.datasetIndex).data[A.index];
+      h(D, j);
     }
   }, u = [(((y = i.current) == null ? void 0 : y.data.datasets[0].data[a]) || "unavailable").toString(), (((w = i.current) == null ? void 0 : w.data.datasets[1].data[a]) || "unavailable").toString()], f = ((v = i.current) == null ? void 0 : v.data.labels) != null ? (_ = i.current) == null ? void 0 : _.data.labels[a] : "null", g = [(k = i.current) == null ? void 0 : k.data.datasets[0].label, (P = i.current) == null ? void 0 : P.data.datasets[1].label], p = a > -1 ? `${f} ${g[0]} ${u[0]}. ${g[1]} ${u[1]}.` : "";
   return Ze(ig, {
@@ -11076,7 +11074,7 @@ const ug = ({
       children: Ze(lg, {
         data: s,
         options: r,
-        plugins: [dg],
+        plugins: [ug],
         "aria-label": p,
         "aria-live": "assertive",
         ref: i,
@@ -11088,7 +11086,7 @@ const ug = ({
     })
   });
 };
-ug.displayName = "LineChart";
+fg.displayName = "LineChart";
 export {
-  ug as LineChart
+  fg as LineChart
 };

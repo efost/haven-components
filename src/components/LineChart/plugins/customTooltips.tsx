@@ -13,7 +13,9 @@ const getOrCreateTooltip = (chart: Chart) => {
     tooltipEl.style.pointerEvents = "none";
     tooltipEl.style.position = "absolute";
     tooltipEl.style.top = "0";
-    tooltipEl.style.transition = "all .1s ease";
+    tooltipEl.style.transition = "all .2s ease-out";
+    tooltipEl.style.transitionDelay = ".1s";
+    tooltipEl.style.height = "100%";
 
     chart.canvas.parentNode?.appendChild(tooltipEl);
   }
@@ -21,21 +23,42 @@ const getOrCreateTooltip = (chart: Chart) => {
   return tooltipEl;
 };
 
+const renderArrow = (parent: HTMLElement, valueDiff: number) => {
+  const diffSpan = document.createElement("span");
+  const arrow = document.createElement("img");
+  arrow.src = "/arrow.png";
+  arrow.style.width = "14px";
+  arrow.style.height = "14px";
+  arrow.style.position = "relative";
+  arrow.style.top = "2px";
+  if (valueDiff > 0) {
+    arrow.style.transform = "rotate(180deg)";
+  }
+  diffSpan.style.color = "rgb(206, 228, 212)";
+  diffSpan.style.display = "inline-block";
+  diffSpan.appendChild(arrow);
+  diffSpan.appendChild(document.createTextNode(Math.abs(valueDiff).toString()));
+  parent.appendChild(diffSpan);
+};
+
 const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"line"> }) => {
   // Tooltip Element
   const { chart, tooltip } = context;
   const tooltipEl = getOrCreateTooltip(chart);
 
-  // Hide if no tooltip
-  if (tooltip.opacity === 0) {
+  if (chart.getActiveElements().length === 0) {
     tooltipEl.style.opacity = "0";
-    return;
+  } else {
+    tooltipEl.style.opacity = "1";
   }
 
   // Set Text
   if (tooltip.body) {
     Array.from(tooltipEl.children).forEach((child) => child.remove());
     tooltip.body.forEach((b: { lines: string[] }, idx) => {
+      if (!chart.getActiveElements()[idx] && tooltip.opacity === 0) {
+        return;
+      }
       const bodyLines = b.lines;
       const table = document.createElement("table");
       table.style.borderRadius = "2px";
@@ -59,22 +82,12 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
           const pointValue = (pointData as number) || 0;
           const prevPointValue = (prevPointData as number) || 0;
           const valueDiff = pointValue - prevPointValue;
-          if (activeIndex > -1 && lineIdx === 1 && valueDiff !== 0) {
-            const diffSpan = document.createElement("span");
-            const arrow = document.createElement("img");
-            arrow.src = "/arrow.png";
-            arrow.style.width = "14px";
-            arrow.style.height = "14px";
-            arrow.style.position = "relative";
-            arrow.style.top = "2px";
-            if (valueDiff > 0) {
-              arrow.style.transform = "rotate(180deg)";
+          if (activeIndex > -1 && lineIdx === 1) {
+            if (valueDiff === 0) {
+              // Should decide if we want to put anything in place of the arrow if no change
+            } else {
+              renderArrow(td, valueDiff);
             }
-            diffSpan.style.color = "rgb(206, 228, 212)";
-            diffSpan.style.display = "inline-block";
-            diffSpan.appendChild(arrow);
-            diffSpan.appendChild(document.createTextNode(Math.abs(valueDiff).toString()));
-            td.appendChild(diffSpan);
           }
         }
         tr.appendChild(td);
@@ -91,7 +104,7 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
   const tooltips = tooltipEl.querySelectorAll("table");
 
   tooltips.forEach((tip, idx) => {
-    const width = tooltipEl.querySelectorAll("table")[idx].getBoundingClientRect().width;
+    const width = tooltips[idx].getBoundingClientRect().width;
     tip.style.top =
       chart.getActiveElements()[idx].element.y - tip.getBoundingClientRect().height / 2 + "px";
     tip.style.left =
@@ -100,15 +113,13 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
         : "0";
   });
 
-  Array.from(tooltipEl.querySelectorAll("table")).forEach((table, idx) => {
-    table.style.backgroundColor = chart.getActiveElements()[idx].element.options.borderColor;
+  Array.from(tooltips).forEach((tooltip, idx) => {
+    tooltip.style.backgroundColor = chart.getActiveElements()[idx].element.options.borderColor;
   });
 
   // Display, position, and set styles for font
-  const bodyFont = toFont(tooltip.options.bodyFont as Partial<FontSpec>);
-  tooltipEl.style.opacity = "1";
   tooltipEl.style.left = positionX + tooltip.caretX + 10 + "px";
-  tooltipEl.style.height = "100%";
+  const bodyFont = toFont(tooltip.options.bodyFont as Partial<FontSpec>);
   tooltipEl.style.fontFamily = bodyFont.family;
   tooltipEl.style.fontSize = `${bodyFont.size}px` || "14px";
   tooltipEl.style.lineHeight = `${bodyFont.lineHeight}px` || "120%";
