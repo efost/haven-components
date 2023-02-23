@@ -9,6 +9,19 @@ export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   };
 }
 
+const defaultColors = {
+  point: {
+    backgroundColor: "rgb(255, 255, 255)",
+    hoverBackgroundColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
+    hoverBorderColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
+    borderColors: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
+  },
+  line: {
+    backgroundColors: ["rgb(125, 162, 158)", "rgb(215, 213, 210)"],
+    borderColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
+  },
+};
+
 const chartOptions: ChartOptionsWithHoverLine = {
   aspectRatio: 1.33,
   mouseLine: {
@@ -17,16 +30,12 @@ const chartOptions: ChartOptionsWithHoverLine = {
   responsive: true,
   elements: {
     line: {
-      backgroundColor: ["rgb(125, 162, 158)", "rgb(215, 213, 210)"],
-      borderColor: "rgb(77, 76, 76)",
+      ...defaultColors.line,
       borderWidth: 2,
       fill: "start",
     },
     point: {
-      backgroundColor: "rgb(255, 255, 255)",
-      hoverBackgroundColor: "rgb(1, 57, 54)",
-      hoverBorderColor: "rgb(1, 57, 54)",
-      borderColor: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
+      ...defaultColors.point,
       borderWidth: 2,
       hoverRadius: 4.5,
       radius: 3,
@@ -104,3 +113,4 @@ const chartOptions: ChartOptionsWithHoverLine = {
 };
 
 export default chartOptions;
+export { defaultColors };

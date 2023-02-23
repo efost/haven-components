@@ -1,7 +1,24 @@
 import { Chart, FontSpec, TooltipModel } from "chart.js";
 import { toFont } from "chart.js/helpers";
 
-const getOrCreateTooltip = (chart: Chart) => {
+// Markup
+
+/* 
+<div id="chartjs-tooltip">
+  <table>
+    <tr>
+      <td>{Label}</td>
+    </tr>
+    <tr>
+      <td>{Datum}</td>
+    </tr>
+  </table>
+</div>
+
+
+*/
+
+const getOrCreateTooltipContainer = (chart: Chart) => {
   let tooltipEl = chart.canvas.parentNode?.querySelector("div");
 
   if (!tooltipEl) {
@@ -13,8 +30,8 @@ const getOrCreateTooltip = (chart: Chart) => {
     tooltipEl.style.pointerEvents = "none";
     tooltipEl.style.position = "absolute";
     tooltipEl.style.top = "0";
-    tooltipEl.style.transition = "all .2s ease-out";
-    tooltipEl.style.transitionDelay = ".1s";
+    tooltipEl.style.transition = "all .2s ease-in-out";
+    // tooltipEl.style.transitionDelay = ".05s";
     tooltipEl.style.height = "100%";
 
     chart.canvas.parentNode?.appendChild(tooltipEl);
@@ -27,6 +44,8 @@ const renderArrow = (parent: HTMLElement, valueDiff: number) => {
   const diffSpan = document.createElement("span");
   const arrow = document.createElement("img");
   arrow.src = "/arrow.png";
+  arrow.style.display = "inline-block";
+  arrow.style.marginLeft = "0.5em";
   arrow.style.width = "14px";
   arrow.style.height = "14px";
   arrow.style.position = "relative";
@@ -34,17 +53,25 @@ const renderArrow = (parent: HTMLElement, valueDiff: number) => {
   if (valueDiff > 0) {
     arrow.style.transform = "rotate(180deg)";
   }
+  const formattedDiff = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    notation: "compact",
+  })
+    .format(Math.abs(valueDiff))
+    .toString();
   diffSpan.style.color = "rgb(206, 228, 212)";
   diffSpan.style.display = "inline-block";
   diffSpan.appendChild(arrow);
-  diffSpan.appendChild(document.createTextNode(Math.abs(valueDiff).toString()));
+  diffSpan.appendChild(document.createTextNode(formattedDiff));
   parent.appendChild(diffSpan);
 };
 
 const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"line"> }) => {
   // Tooltip Element
   const { chart, tooltip } = context;
-  const tooltipEl = getOrCreateTooltip(chart);
+  const tooltipEl = getOrCreateTooltipContainer(chart);
 
   if (chart.getActiveElements().length === 0) {
     tooltipEl.style.opacity = "0";
@@ -52,17 +79,30 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
     tooltipEl.style.opacity = "1";
   }
 
+  const { offsetLeft: positionX } = chart.canvas;
+
+  tooltipEl.style.left = positionX + tooltip.caretX + 10 + "px";
+  const bodyFont = toFont(tooltip.options.bodyFont as Partial<FontSpec>);
+  tooltipEl.style.fontFamily = bodyFont.family;
+  tooltipEl.style.fontSize = `${bodyFont.size}px` || "14px";
+  tooltipEl.style.lineHeight = `${bodyFont.lineHeight}px` || "120%";
+  tooltipEl.style.padding = tooltip.options.padding + "px " + tooltip.options.padding + "px";
+
   // Set Text
   if (tooltip.body) {
     Array.from(tooltipEl.children).forEach((child) => child.remove());
+    // Line 1 is the dataset label
+    // Line 2 is the dataset datum
     tooltip.body.forEach((b: { lines: string[] }, idx) => {
       if (!chart.getActiveElements()[idx] && tooltip.opacity === 0) {
         return;
       }
       const bodyLines = b.lines;
       const table = document.createElement("table");
+      table.style.backgroundColor = chart.getActiveElements()[idx].element.options.borderColor;
       table.style.borderRadius = "2px";
       table.style.marginBottom = "20px";
+      table.style.padding = "0 2px";
       table.style.position = "absolute";
       tooltipEl.appendChild(table);
       const tableBody = document.createElement("tbody");
@@ -96,34 +136,15 @@ const externalTooltipHandler = (context: { chart: Chart; tooltip: TooltipModel<"
         }
         table.appendChild(tableBody);
       });
+      const width = table.getBoundingClientRect().width;
+      table.style.top =
+        chart.getActiveElements()[idx].element.y - table.getBoundingClientRect().height / 2 + "px";
+      table.style.left =
+        tooltip.caretX > chart.canvas.getBoundingClientRect().width / 2
+          ? `${-1 * width - 20}px`
+          : "0";
     });
   }
-
-  const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
-
-  const tooltips = tooltipEl.querySelectorAll("table");
-
-  tooltips.forEach((tip, idx) => {
-    const width = tooltips[idx].getBoundingClientRect().width;
-    tip.style.top =
-      chart.getActiveElements()[idx].element.y - tip.getBoundingClientRect().height / 2 + "px";
-    tip.style.left =
-      tooltip.caretX > positionX + chart.canvas.getBoundingClientRect().width / 2
-        ? `${-1 * width - 20}px`
-        : "0";
-  });
-
-  Array.from(tooltips).forEach((tooltip, idx) => {
-    tooltip.style.backgroundColor = chart.getActiveElements()[idx].element.options.borderColor;
-  });
-
-  // Display, position, and set styles for font
-  tooltipEl.style.left = positionX + tooltip.caretX + 10 + "px";
-  const bodyFont = toFont(tooltip.options.bodyFont as Partial<FontSpec>);
-  tooltipEl.style.fontFamily = bodyFont.family;
-  tooltipEl.style.fontSize = `${bodyFont.size}px` || "14px";
-  tooltipEl.style.lineHeight = `${bodyFont.lineHeight}px` || "120%";
-  tooltipEl.style.padding = tooltip.options.padding + "px " + tooltip.options.padding + "px";
 };
 
 export default externalTooltipHandler;

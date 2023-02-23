@@ -19,7 +19,7 @@ import annotationPlugin from "chartjs-plugin-annotation";
 import { KeyboardEventHandler, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 
-import defaultOptions from "./config/defaultOptions";
+import defaultOptions, { defaultColors } from "./config/defaultOptions";
 import hoverLine, { ChartOptionsWithHoverLine } from "./plugins/hoverLine";
 
 export interface ChartTheme {
@@ -50,23 +50,6 @@ ChartJS.register(
   annotationPlugin,
 );
 
-// [
-//   {
-//     elements: {
-//       point: {
-//         backgroundColor: 'rgb(0, 77, 73)',
-//       },
-//     },
-//   },
-//   {
-//     elements: {
-//       point: {
-//         backgroundColor: 'rgb(77, 76, 76)',
-//       },
-//     },
-//   },
-// ];
-
 export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
   const chartRef = useRef<ChartJS>(null);
 
@@ -83,15 +66,27 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
           backgroundColor:
             chartTheme?.colors?.[i].fill ||
             options?.elements?.line?.backgroundColor ||
-            defaultOptions.elements?.line?.backgroundColor,
+            defaultColors.line.backgroundColors[i],
           borderColor:
             chartTheme?.colors?.[i].line ||
             options?.elements?.line?.borderColor ||
-            defaultOptions.elements?.line?.borderColor,
+            defaultColors.line.borderColors[i],
+          pointBorderColor:
+            chartTheme?.colors?.[i].point ||
+            options?.elements?.point?.borderColor ||
+            defaultColors.point.borderColors[i],
+          pointHoverBorderColor:
+            chartTheme?.colors?.[i].point ||
+            options?.elements?.point?.borderColor ||
+            defaultColors.point?.hoverBorderColors[i],
+          pointHoverBackgroundColor:
+            chartTheme?.colors?.[i].point ||
+            options?.elements?.point?.backgroundColor ||
+            defaultColors.point.hoverBackgroundColors[i],
           pointBackgroundColor:
             chartTheme?.colors?.[i].point ||
             options?.elements?.point?.backgroundColor ||
-            defaultOptions.elements?.point?.backgroundColor,
+            defaultColors.point.backgroundColor,
           ...set,
         };
       }),
