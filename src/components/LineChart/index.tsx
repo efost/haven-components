@@ -13,12 +13,13 @@ import {
   Point,
   PointElement,
   Title,
-  Tooltip,
+  Tooltip as TooltipInterface,
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { KeyboardEventHandler, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 
+import { TooltipPortal } from "../Tooltip";
 import defaultOptions, { defaultColors } from "./config/defaultOptions";
 import hoverLine, { ChartOptionsWithHoverLine } from "./plugins/hoverLine";
 
@@ -44,7 +45,7 @@ ChartJS.register(
   PointElement,
   LineElement,
   Title,
-  Tooltip,
+  TooltipInterface,
   Legend,
   Filler,
   annotationPlugin,
@@ -52,6 +53,7 @@ ChartJS.register(
 
 export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
   const chartRef = useRef<ChartJS>(null);
+  const tooltipContainerRef = useRef<HTMLDivElement>(null);
 
   defaults.font = {
     family: chartTheme?.font || "'Nunito Sans', sans-serif",
@@ -204,7 +206,7 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
 
   return (
     <>
-      <Box className="text" sx={{ position: "relative", width: "100%" }}>
+      <Box className="text" sx={{ position: "relative", width: "100%" }} ref={tooltipContainerRef}>
         <Line
           data={dataWithColors}
           options={chartOptions}
@@ -217,6 +219,7 @@ export const LineChart = ({ data, options, chartTheme }: LineChartProps) => {
           onFocus={() => setActiveIndex(0)}
           tabIndex={0}
         />
+        <TooltipPortal chart={chartRef.current} />
       </Box>
       {/* {data.datasets.map((set, i) => (
         <table key={`dataset-${i}`}>

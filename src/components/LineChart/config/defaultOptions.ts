@@ -1,6 +1,6 @@
 import { ChartOptions, Color } from "chart.js";
 
-import externalTooltipHandler from "../plugins/customTooltips";
+import { externalTooltipHandler } from "../../Tooltip";
 
 export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   mouseLine: {
