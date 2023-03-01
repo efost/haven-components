@@ -24,7 +24,17 @@ const hoverLine: Plugin<"line"> = {
       const activeElement = chart.getActiveElements()[0];
       chartOptions.mouseLine.x = activeElement.element.x;
     } else {
-      chartOptions.mouseLine.x = -100;
+      if (event.x && event.x > chartArea.right) {
+        chartOptions.mouseLine.x =
+          chart.getDatasetMeta(0).data[chart.data.datasets[0].data.length - 1].x;
+      }
+      if (
+        event.x &&
+        event.x < chartArea.left &&
+        event.x > chart.canvas.getBoundingClientRect().left
+      ) {
+        chartOptions.mouseLine.x = chart.getDatasetMeta(0).data[0].x;
+      }
     }
   },
   beforeDatasetsDraw: function (chart: ChartJS<"line">) {
@@ -44,10 +54,6 @@ const hoverLine: Plugin<"line"> = {
       ctx.lineTo(chartOptions.mouseLine.x || 0, chartArea.top);
       ctx.setLineDash([2, 2]);
       ctx.stroke();
-      // ctx.shadowColor = "rgba(0, 0, 0, 0.42)";
-      // ctx.shadowBlur = 8;
-      // ctx.shadowOffsetX = 0;
-      // ctx.shadowOffsetY = 1;
       ctx.beginPath();
       ctx.fillStyle = chartOptions.mouseLine.color;
       ctx.fill();

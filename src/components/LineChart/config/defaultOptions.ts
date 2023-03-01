@@ -1,6 +1,5 @@
 import { ChartOptions, Color } from "chart.js";
-
-import { externalTooltipHandler } from "../../Tooltip";
+import { externalTooltipHandler } from "src/components/Tooltip";
 
 export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   mouseLine: {
@@ -12,13 +11,13 @@ export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
 const defaultColors = {
   point: {
     backgroundColor: "rgb(255, 255, 255)",
-    hoverBackgroundColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
-    hoverBorderColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
-    borderColors: ["rgb(0, 77, 73)", "rgb(77, 76, 76)"],
+    hoverBackgroundColors: ["rgb(77, 76, 76)", "rgb(2, 77, 73)"],
+    hoverBorderColors: ["rgb(77, 76, 76)", "rgb(2, 77, 73)"],
+    borderColors: ["rgb(77, 76, 76)", "rgb(0, 77, 73)"],
   },
   line: {
-    backgroundColors: ["rgb(125, 162, 158)", "rgb(215, 213, 210)"],
-    borderColors: ["rgb(2, 77, 73)", "rgb(77, 76, 76)"],
+    backgroundColors: ["rgb(215, 213, 210)", "rgb(125, 162, 158)"],
+    borderColors: ["rgb(77, 76, 76)", "rgb(2, 77, 73)"],
   },
 };
 
@@ -45,6 +44,10 @@ const chartOptions: ChartOptionsWithHoverLine = {
     includeInvisible: false,
     intersect: false,
     mode: "index",
+  },
+  parsing: {
+    xAxisKey: "label",
+    yAxisKey: "value",
   },
   plugins: {
     annotation: {
