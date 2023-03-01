@@ -15,7 +15,7 @@ const showTooltipOnLoad = {
             index: chart.data.datasets[1].data.length - 1,
           },
         ],
-        {},
+        { x: 0, y: 0 },
       );
       chart.update();
     }

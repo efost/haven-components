@@ -61,7 +61,6 @@ const chartOptions: ChartOptionsWithHoverLine = {
       labels: {
         boxHeight: 12,
         boxWidth: 12,
-        pointStyle: "circle",
       },
       position: "bottom",
     },

@@ -72,7 +72,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ chart, tooltip }) => {
                     }px`
                   : 0,
                 left:
-                  xPosition > chart.canvas.getBoundingClientRect().width / 2
+                  xPosition > chart.chartArea.left + chart.chartArea.width / 2 - 20
                     ? `${
                         tableRef.current?.getBoundingClientRect().width
                           ? -1 * tableRef.current?.getBoundingClientRect().width - 20

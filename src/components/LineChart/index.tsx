@@ -140,12 +140,14 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
   const [activeIndex, setActiveIndex] = useState(-1);
 
   useEffect(() => {
-    setActiveIndex(
-      Math.max(
-        chartRef.current?.data.datasets[0].data.length - 1,
-        chartRef.current?.data.datasets[1].data.length - 1,
-      ),
-    );
+    if (chartRef.current?.data.datasets[0].data && chartRef.current?.data.datasets[1].data) {
+      setActiveIndex(
+        Math.max(
+          chartRef.current?.data.datasets[0].data.length - 1,
+          chartRef.current?.data.datasets[1].data.length - 1,
+        ),
+      );
+    }
   }, []);
 
   useEffect(() => {
@@ -244,7 +246,9 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
     <ThemeProvider theme={theme as ThemeOptions}>
       <ActiveIndex.Provider value={activeIndex}>
         <Box className="text" sx={{ position: "relative", width: "100%" }}>
-          <span>Your home equity estimate</span>
+          <Typography fontWeight={600} fontSize={18}>
+            Your home equity estimate
+          </Typography>
           {currentHeroNumber && (
             <Typography variant="h3" component="h1" sx={{ marginTop: "8px", marginBottom: "10px" }}>
               {typeof currentHeroNumber === "number"
@@ -258,17 +262,27 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
           )}
 
           <Box sx={{ fontSize: "14px", marginBottom: "24px" }}>
-            Updated on{" "}
-            {activeIndex > -1 && data.datasets[0].data[activeIndex].updated ? (
-              <>
-                {data.datasets[0].data[activeIndex].updated}{" "}
-                <img style={{ width: "20px", verticalAlign: "text-bottom" }} src={infoIcon} />
-              </>
-            ) : (
-              "—/—/—"
-            )}
+            <Typography fontSize={14}>
+              Updated on{" "}
+              {activeIndex > -1 && data.datasets[0].data[activeIndex].updated ? (
+                <>
+                  {data.datasets[0].data[activeIndex].updated}{" "}
+                  <img style={{ width: "20px", verticalAlign: "text-bottom" }} src={infoIcon} />
+                </>
+              ) : (
+                "—/—/—"
+              )}
+            </Typography>
           </Box>
-          <Box sx={{ position: "relative" }}>
+          <Box
+            sx={{
+              position: "relative",
+              // This is to line up the left edge of the Y scale with the type above, since
+              // Chart.js enforces uniform padding on both left and right, and we only want
+              // it on the right.
+              marginLeft: "-10px",
+            }}
+          >
             <Line
               data={dataWithColors}
               options={chartOptions}
@@ -278,20 +292,11 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
               ref={chartRef}
               onKeyUp={handleKeyup}
               tabIndex={0}
+              onTouchMove={handleMouseMove}
               onMouseMove={handleMouseMove}
               onMouseOver={() => setActiveIndex(0)}
               onMouseOut={() => {
                 setActiveIndex(data.datasets[0].data.length - 1);
-                // chartRef.current?.setActiveElements([
-                //   {
-                //     datasetIndex: 0,
-                //     index: data.datasets[0].data.length - 1,
-                //   },
-                //   {
-                //     datasetIndex: 1,
-                //     index: data.datasets[0].data.length - 1,
-                //   },
-                // ]);
               }}
             />
             <TooltipPortal
@@ -300,29 +305,6 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
             />
           </Box>
         </Box>
-        {/* {data.datasets.map((set, i) => (
-        <table key={`dataset-${i}`}>
-          <thead>
-            <tr>
-              {data.labels &&
-                data.labels.map((label, i) => (
-                  <td key={`label-${i}`} aria-label={label as string}>
-                    {label as string}
-                  </td>
-                ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {set.data.map((datum, i) => (
-                <td key={`datum-${i}`} aria-label={datum === 0 ? 'empty' : datum?.toString()}>
-                  {datum === 0 ? 'empty' : datum?.toString()}
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      ))} */}
       </ActiveIndex.Provider>
     </ThemeProvider>
   );
