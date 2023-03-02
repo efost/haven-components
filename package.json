@@ -1,7 +1,7 @@
 {
   "name": "haven-components",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.1-reactified",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -43,6 +43,7 @@
     "@babel/core": "^7.20.12",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.6",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@storybook/addon-actions": "^7.0.0-beta.43",
     "@storybook/addon-essentials": "^7.0.0-beta.43",
