@@ -17,4 +17,4 @@ declare const externalTooltipHandler: ({ chart, tooltip, }: {
 }) => JSX.Element;
 export default Tooltip;
 export { externalTooltipHandler, TooltipPortal };
-//# sourceMappingURL=index.d.ts.map
+//# sourceMappingURL=Tooltip.d.ts.map

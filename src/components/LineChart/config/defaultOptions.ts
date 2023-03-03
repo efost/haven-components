@@ -1,5 +1,5 @@
 import { ChartOptions, Color } from "chart.js";
-import { externalTooltipHandler } from "src/components/Tooltip";
+import { externalTooltipHandler } from "src/components/LineChart/Tooltip";
 
 export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   mouseLine: {
@@ -22,10 +22,10 @@ const defaultColors = {
 };
 
 const chartOptions: ChartOptionsWithHoverLine = {
-  aspectRatio: 1.33,
   mouseLine: {
     color: "rgb(77, 76, 76)",
   },
+  maintainAspectRatio: false,
   responsive: true,
   elements: {
     line: {
@@ -66,6 +66,12 @@ const chartOptions: ChartOptionsWithHoverLine = {
     },
     tooltip: {
       bodyAlign: "center",
+      titleFont: {
+        family: "'Nunito Sans', sans-serif",
+      },
+      bodyFont: {
+        family: "'Nunito Sans', sans-serif",
+      },
       callbacks: {
         label: (context) => {
           let label = "";

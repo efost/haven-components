@@ -4,7 +4,7 @@ import { Chart, FontSpec, TooltipModel } from "chart.js";
 import { toFont } from "chart.js/helpers";
 import { useContext, useRef } from "react";
 
-import { ActiveIndex } from "../LineChart";
+import { ActiveIndex } from ".";
 
 export interface TooltipProps {
   children?: JSX.Element[];
@@ -28,7 +28,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ chart, tooltip }) => {
         pointerEvents: "none",
         position: "absolute",
         top: "0",
-        transition: "all .2s ease-in-out",
+        transition: "all .5s cubic-bezier(0.230, 1.000, 0.320, 1.000)",
         height: "100%",
         left: `${
           activeElements && activeElements.length > 0

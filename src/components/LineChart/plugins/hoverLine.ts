@@ -1,5 +1,7 @@
 import { Chart as ChartJS, ChartEvent, ChartOptions, Color, Plugin } from "chart.js";
 
+import chartOptions from "../config/defaultOptions";
+
 export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
   mouseLine: {
     x?: number;
@@ -9,6 +11,9 @@ export interface ChartOptionsWithHoverLine extends ChartOptions<"line"> {
 
 const hoverLine: Plugin<"line"> = {
   id: "hoverLine",
+  resize: () => {
+    chartOptions.mouseLine.x = -20;
+  },
   afterEvent: function (chart: ChartJS<"line">, { event }: { event: ChartEvent }) {
     const chartOptions = chart.options as ChartOptionsWithHoverLine;
     const chartArea = chart.chartArea;
