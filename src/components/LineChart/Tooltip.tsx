@@ -2,23 +2,44 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box/Box";
 import { Chart, FontSpec, TooltipModel } from "chart.js";
 import { toFont } from "chart.js/helpers";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { ActiveIndex } from ".";
+import { useWindowSize } from "./hooks";
+import { getLongestDatasetLength } from "./utils";
 
 export interface TooltipProps {
   children?: JSX.Element[];
   chart?: Chart | null;
   tooltip?: TooltipModel | null;
-  style?: React.CSSProperties;
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({ chart, tooltip }) => {
   const tableRef = useRef<HTMLTableElement>(null);
-  const { offsetLeft: positionX } = chart?.canvas as HTMLCanvasElement;
   const bodyFont = toFont(tooltip?.options.bodyFont as Partial<FontSpec>);
-  const activeElements = chart?.getActiveElements();
   const activeIndex = useContext(ActiveIndex);
+
+  const [xPosition, setXPosition] = useState(
+    chart?.getDatasetMeta(0).data.at(getLongestDatasetLength({ chart }) - 1)?.x || -100,
+  );
+
+  const [isResizing, setIsResizing] = useState(false);
+
+  // This hook provides height too, but that's not super important for this particular usage.
+  const { width } = useWindowSize();
+
+  // Due to rerender time, the tooltip needs to wait a bit longer to calculate its new position.
+  const tooltipRepositionDelay =
+    typeof chart?.options.resizeDelay === "number" ? 2 * chart.options.resizeDelay : 400;
+
+  useEffect(() => {
+    setIsResizing(true);
+    setTimeout(() => {
+      setXPosition(chart?.getDatasetMeta(0).data.at(activeIndex)?.x || -100);
+      setIsResizing(false);
+    }, tooltipRepositionDelay);
+  }, [width]);
+
   return (
     <Box
       id="chartjs-tooltip-react"
@@ -28,57 +49,58 @@ export const Tooltip: React.FC<TooltipProps> = ({ chart, tooltip }) => {
         pointerEvents: "none",
         position: "absolute",
         top: "0",
-        transition: "all .5s cubic-bezier(0.230, 1.000, 0.320, 1.000)",
+        transition: `all .5s cubic-bezier(0.230, 1.000, 0.320, 1.000)`,
         height: "100%",
         left: `${
-          activeElements && activeElements.length > 0
-            ? activeElements[0].element.x + 10
-            : tooltip
-            ? positionX + tooltip.caretX + 10
-            : 0
+          // We only want to use the effect-coupled value if the window has resized, otherwise we recompute below
+          isResizing ? xPosition : chart?.getDatasetMeta(0).data.at(activeIndex)?.x || -100
         }px`,
         fontFamily: bodyFont.family,
         fontSize: `${bodyFont.size}px` || "14px",
         lineHeight: `${bodyFont.lineHeight}px` || "120%",
-        opacity: chart?.getActiveElements().length === 0 ? 0 : 1,
+        opacity: activeIndex === -1 ? 0 : 1,
         padding: tooltip?.options.padding + "px ",
       }}
     >
       {chart &&
         tooltip?.body &&
         tooltip?.body.map((b: { lines: string[] }, idx) => {
-          if (!chart.getActiveElements()[idx] && tooltip.opacity === 0) {
-            return;
-          }
           const bodyLines = b.lines;
-          const xPosition = chart.getActiveElements()[0]
-            ? chart.getActiveElements()[0].element.x
-            : tooltip.caretX;
+
+          const currentDatasetIndex = tooltip?.dataPoints[idx].datasetIndex;
+
+          if (chart.data.datasets[currentDatasetIndex].data.at(activeIndex).value === null) {
+            return <></>;
+          }
+
+          const currentPointMeta = chart
+            .getDatasetMeta(currentDatasetIndex)
+            .data.at(activeIndex) || {
+            x: 0,
+            y: 0,
+            tooltipPosition: () => ({ x: 0, y: 0 }),
+          };
 
           return (
             <table
               key={`table-${idx}`}
               ref={tableRef}
               style={{
-                backgroundColor: chart.getActiveElements()[idx].element.options.borderColor,
+                backgroundColor: chart.getDatasetMeta(currentDatasetIndex).data.at(activeIndex)
+                  ?.options.borderColor,
                 borderRadius: "2px",
                 marginBottom: "20px",
                 padding: "0 2px",
                 position: "absolute",
-                top: tableRef.current
-                  ? `${
-                      chart.getActiveElements()[idx].element.tooltipPosition(true).y -
-                      tableRef.current?.getBoundingClientRect().height / 2
-                    }px`
-                  : 0,
+                top: `${
+                  currentPointMeta.tooltipPosition(true).y -
+                  tooltip?.height / (tooltip.body.length * 2)
+                }px`,
                 left:
-                  xPosition > chart.chartArea.left + chart.chartArea.width / 2 - 20
-                    ? `${
-                        tableRef.current?.getBoundingClientRect().width
-                          ? -1 * tableRef.current?.getBoundingClientRect().width - 20
-                          : -20
-                      }px`
-                    : "0",
+                  currentPointMeta.x >
+                  chart.chartArea.left + chart.chartArea.width - tooltip?.width - 12
+                    ? `${-1 * tooltip?.width - 12}px`
+                    : "10px",
               }}
             >
               <tbody>
@@ -90,32 +112,37 @@ export const Tooltip: React.FC<TooltipProps> = ({ chart, tooltip }) => {
                 <tr style={{ backgroundColor: "inherit", borderWidth: "0" }} key={`tr-1`}>
                   <td style={{ borderWidth: "0", whiteSpace: "nowrap" }}>
                     {(() => {
-                      // @ts-ignore For some reason, the correct type for these is not being inferred
-                      const pointData = chart.data.datasets[idx].data.at(activeIndex)?.value;
-                      const prevPointData = chart.data.datasets[idx].data.at(
+                      const pointData =
+                        // @ts-ignore For some reason, the correct type for these is not being inferred
+                        chart.data.datasets[currentDatasetIndex].data.at(activeIndex)?.value;
+                      const prevPointData = chart.data.datasets[currentDatasetIndex].data.at(
                         activeIndex - 1,
                         // @ts-ignore For some reason, the correct type for these is not being inferred
                       )?.value;
                       let arrow = <></>;
-                      let pointValue = 0;
-                      if (![pointData, prevPointData].includes(null)) {
-                        pointValue = (pointData as number) || 0;
-                        const prevPointValue = (prevPointData as number) || 0;
-                        const valueDiff = pointValue - prevPointValue;
-                        arrow =
-                          activeIndex > -1 && valueDiff !== 0 ? (
-                            <Arrow {...{ valueDiff }} />
-                          ) : (
-                            <></>
-                          );
+                      let pointValue: number | null = null;
+                      if (pointData != null) {
+                        pointValue = pointData as number;
+                        if (prevPointData != null) {
+                          const prevPointValue = prevPointData as number;
+                          const valueDiff = pointValue - prevPointValue;
+                          arrow =
+                            activeIndex > 0 && valueDiff !== 0 ? (
+                              <Arrow {...{ valueDiff }} />
+                            ) : (
+                              <></>
+                            );
+                        }
                       }
                       return (
                         <>
-                          {new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            minimumFractionDigits: 0,
-                          }).format(pointValue)}{" "}
+                          {typeof pointValue === "number"
+                            ? new Intl.NumberFormat("en-US", {
+                                style: "currency",
+                                currency: "USD",
+                                minimumFractionDigits: 0,
+                              }).format(pointValue)
+                            : pointValue}{" "}
                           {arrow}
                         </>
                       );
@@ -164,57 +191,56 @@ const Arrow: React.FC<{ valueDiff: number }> = ({ valueDiff }: { valueDiff: numb
 };
 
 const TooltipPortal = ({ chart, tooltip }: { chart: Chart; tooltip: TooltipModel<"line"> }) => {
-  if (chart && tooltip) {
-    return <>{externalTooltipHandler({ chart, tooltip })}</>;
-  } else {
-    return <></>;
-  }
+  const activeIndex = useContext(ActiveIndex);
+  return (
+    <>
+      {chart && tooltip && activeIndex > -1
+        ? externalTooltipHandler({ chart, tooltip, activeIndex })
+        : null}
+    </>
+  );
 };
 
 const externalTooltipHandler = ({
   chart,
   tooltip,
+  activeIndex,
 }: {
   chart: Chart;
   tooltip: TooltipModel<"line">;
+  activeIndex: number;
 }) => {
   const activeElements = chart.getActiveElements();
-  if (activeElements.length === 0 && chart.data.datasets[0] && chart.data.datasets[1]) {
-    chart.setActiveElements([
-      {
-        datasetIndex: 0,
-        index: Math.max(
-          chart.data.datasets[0].data.length - 1,
-          chart.data.datasets[1].data.length - 1,
-        ),
-      },
-      {
-        datasetIndex: 1,
-        index: Math.max(
-          chart.data.datasets[0].data.length - 1,
-          chart.data.datasets[1].data.length - 1,
-        ),
-      },
-    ]);
+  if (activeElements.length === 0) {
+    const newActiveElements = chart.data.datasets.map((_, idx) => {
+      return {
+        datasetIndex: idx,
+        index: getLongestDatasetLength({ chart }) - 1,
+      };
+    });
+    chart.setActiveElements(newActiveElements);
     chart.update();
   }
+
+  if (activeIndex === -1 /* chart has just initialized */) {
+    const newActiveElements = chart.data.datasets.map((_, idx) => {
+      return {
+        datasetIndex: idx,
+        index: getLongestDatasetLength({ chart }) - 1,
+      };
+    });
+    chart.setActiveElements(newActiveElements);
+    chart.update();
+  }
+
   return (
     <Typography component="div">
-      <Tooltip
-        chart={chart}
-        tooltip={tooltip}
-        style={{
-          // opacity: activeElements.length === 0 ? 0 : 1,
-          left: `${
-            (activeElements[0]
-              ? activeElements[0].element.x
-              : chart.getDatasetMeta(0).data[chart.data.datasets[0].data.length - 1].x) + 20
-          }px`,
-        }}
-      />
+      <Tooltip chart={chart} tooltip={tooltip} />
     </Typography>
   );
 };
+
+Tooltip.displayName = "Tooltip";
 
 export default Tooltip;
 export { externalTooltipHandler, TooltipPortal };

@@ -10,7 +10,8 @@ const config = {
   },
   docs: {
     autodocs: true
-  }
+  },
+  staticDirs: ['../public'],
 };
 
 export default config;

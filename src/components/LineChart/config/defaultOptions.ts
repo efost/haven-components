@@ -26,7 +26,6 @@ const chartOptions: ChartOptionsWithHoverLine = {
     color: "rgb(77, 76, 76)",
   },
   maintainAspectRatio: false,
-  responsive: true,
   elements: {
     line: {
       ...defaultColors.line,
@@ -94,6 +93,7 @@ const chartOptions: ChartOptionsWithHoverLine = {
       external: externalTooltipHandler,
     },
   },
+  resizeDelay: 100,
   scales: {
     x: {
       grace: "5%",

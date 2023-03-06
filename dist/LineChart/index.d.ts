@@ -1,7 +1,7 @@
 import { ThemeOptions } from "@mui/material/styles";
 import { ChartData, ChartOptions } from "chart.js";
 import React from "react";
-export interface ChartTheme {
+export interface ChartTheme extends ThemeOptions {
     chart?: {
         font?: string;
         fontSize?: number;
@@ -23,8 +23,7 @@ export interface LineChartProps {
         updated: string;
     }[]>;
     options?: ChartOptions;
-    chartTheme?: ChartTheme;
-    theme?: ThemeOptions & ChartTheme;
+    theme?: ChartTheme;
     hideLegend?: boolean;
 }
 export declare const ActiveIndex: React.Context<number>;

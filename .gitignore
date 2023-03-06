@@ -1,3 +1,4 @@
 node_modules
 vite.config.ts.timestamp*
 .DS_Store
+storybook-static

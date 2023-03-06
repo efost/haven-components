@@ -27,7 +27,7 @@ import showTooltipOnLoad from "./plugins/showTooltipOnLoad";
 import { TooltipPortal } from "./Tooltip";
 import { getLongestDatasetLength } from "./utils";
 
-export interface ChartTheme {
+export interface ChartTheme extends ThemeOptions {
   chart?: {
     font?: string;
     fontSize?: number;
@@ -46,8 +46,7 @@ export interface ChartTheme {
 export interface LineChartProps {
   data: ChartData<"line", { label: string; value: number; updated: string }[]>;
   options?: ChartOptions;
-  chartTheme?: ChartTheme;
-  theme?: ThemeOptions & ChartTheme;
+  theme?: ChartTheme;
   hideLegend?: boolean;
 }
 
@@ -143,7 +142,9 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
     ...optionOverrides,
   });
 
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeIndex, setActiveIndex] = useState(
+    getLongestDatasetLength({ chart: chartRef.current }) - 1 || -1,
+  );
 
   useEffect(() => {
     if (chartRef.current?.data.datasets[0].data) {
@@ -152,45 +153,55 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
   }, []);
 
   useEffect(() => {
-    if (chartRef.current == null || activeIndex === -1) {
+    if (chartRef.current == null) {
       return;
     }
 
     const chart = chartRef.current;
+
     chart.setActiveElements([
       {
         datasetIndex: 0,
-        index: activeIndex,
+        index: activeIndex === -1 ? getLongestDatasetLength({ chart }) - 1 : activeIndex,
       },
       {
         datasetIndex: 1,
-        index: activeIndex,
+        index: activeIndex === -1 ? getLongestDatasetLength({ chart }) - 1 : activeIndex,
       },
     ]);
+
     const chartOptions = chart.options as ChartOptionsWithHoverLine;
-    const activeElements = chart.getActiveElements();
 
     // Move the hover line when the activeIndex changes
-    if (chartOptions.mouseLine && activeElements[0]) {
-      chartOptions.mouseLine.x = activeElements[0].element.x;
+    if (chartOptions.mouseLine && activeIndex > -1) {
+      chartOptions.mouseLine.x = chart.getDatasetMeta(0).data.at(activeIndex)?.x;
     }
 
     // Do the math for the hero number
-    if (data && data.datasets[0] && data.datasets[1]) {
+    if (
+      data &&
+      activeIndex > -1 &&
+      data.datasets[0].data[activeIndex].value &&
+      data.datasets[1].data[activeIndex].value
+    ) {
       const datapoint0 = data.datasets[0].data[activeIndex].value as number;
       const datapoint1 = data.datasets[1].data[activeIndex].value as number;
       if (datapoint0 !== null && datapoint1 !== null) {
         setCurrentHeroNumber(Math.abs(datapoint0 - datapoint1));
       }
+    } else {
+      setCurrentHeroNumber("—");
     }
     // Refresh the chart
     chart.update();
   }, [activeIndex]);
 
   const handleMouseMove = () => {
-    if (chartRef.current?.getActiveElements()[0]) {
-      setActiveIndex(chartRef.current?.getActiveElements()[0].index || 0);
-    }
+    setActiveIndex(
+      chartRef.current?.getActiveElements()[0]
+        ? chartRef.current?.getActiveElements()[0].index
+        : getLongestDatasetLength({ chart: chartRef.current }) - 1,
+    );
   };
 
   // A11y stuff for keyboard controls
@@ -215,27 +226,42 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
 
   const currentDataPoints = [
     (data.datasets[0].data[activeIndex]?.value || "unavailable").toString(),
-    (data.datasets[1].data[activeIndex]?.value || "unavailable").toString(),
   ];
-  const currentXLabel =
-    chartRef.current?.data.labels != null ? chartRef.current?.data.labels[activeIndex] : "null";
 
-  const currentYLabels = [
-    chartRef.current?.data.datasets[0].label,
-    chartRef.current?.data.datasets[1].label,
-  ];
+  if (data.datasets[1]) {
+    currentDataPoints.push(
+      data.datasets[1].data[activeIndex]?.value != null
+        ? data.datasets[1].data[activeIndex]?.value.toString()
+        : "unavailable",
+    );
+  }
+
+  const currentXLabel =
+    data.datasets[0].data[activeIndex] != null
+      ? data.datasets[0].data[activeIndex].label.toString()
+      : "null";
+
+  const currentYLabels = [data.datasets[0].label, data.datasets[1] ? data.datasets[1].label : ""];
 
   const ariaLabel =
     activeIndex > -1
-      ? `${currentXLabel} ${currentYLabels[0]} ${currentDataPoints[0]}. ${currentYLabels[1]} ${currentDataPoints[1]}.`
+      ? `${currentXLabel} ${currentYLabels[0]} ${currentDataPoints[0]}.${
+          data.datasets[1] ? ` ${currentYLabels[1]} ${currentDataPoints[1]}.` : ""
+        }`
       : "";
 
   const [showDisclosure, setShowDisclosure] = useState(false);
 
+  const supportsContainerQueries = "container" in document.documentElement.style;
+  // Container query polyfill
+  if (!supportsContainerQueries) {
+    require("https://cdn.skypack.dev/container-query-polyfill");
+  }
+
   return (
-    <ThemeProvider theme={theme as ThemeOptions}>
+    <ThemeProvider theme={theme as ChartTheme}>
       <ActiveIndex.Provider value={activeIndex}>
-        <Box sx={{ height: "100%" }}>
+        <Box sx={{ height: "100%", containerType: "inline-size" }}>
           {showDisclosure && <Disclosure setShowDisclosure={setShowDisclosure} />}
           <Box sx={{ position: "relative", padding: "2rem" }}>
             <Typography fontWeight={600} fontSize={18}>
@@ -260,9 +286,9 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
             <Box sx={{ fontSize: "14px", marginBottom: "24px" }}>
               <Typography fontSize={14}>
                 Updated on{" "}
-                {activeIndex > -1 && data.datasets[0].data[activeIndex].updated ? (
+                {activeIndex > -1 && data.datasets[0].data.at(activeIndex)?.updated ? (
                   <>
-                    {data.datasets[0].data[activeIndex].updated}{" "}
+                    {data.datasets[0].data.at(activeIndex)?.updated}{" "}
                     <button
                       onClick={() => setShowDisclosure(true)}
                       style={{
@@ -289,7 +315,7 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
                   // it on the right.
                   marginLeft: "-10px",
                   height: "236px",
-                  [theme?.breakpoints?.up("sm")]: {
+                  [`@container (min-width: ${theme?.breakpoints?.values.sm}px)`]: {
                     height: "324px",
                   },
                 };
@@ -306,7 +332,9 @@ export const LineChart = ({ data, options, theme, hideLegend }: LineChartProps) 
                 tabIndex={0}
                 onTouchMove={handleMouseMove}
                 onMouseMove={handleMouseMove}
-                onMouseOver={() => setActiveIndex(0)}
+                onMouseOver={() => {
+                  setActiveIndex(getLongestDatasetLength({ chart: chartRef.current }) - 1);
+                }}
                 onMouseOut={() => {
                   setActiveIndex(getLongestDatasetLength({ chart: chartRef.current }) - 1);
                 }}

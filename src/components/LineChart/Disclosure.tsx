@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, ThemeOptions, Typography } from "@mui/material";
 import { keyframes } from "@mui/system";
 import { Dispatch, SetStateAction } from "react";
 
@@ -16,7 +16,7 @@ const disclosureAnimateIn = keyframes`
 }
 `;
 
-const disclosureStyles = {
+const disclosureStyles = (theme: ThemeOptions) => ({
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0)",
     position: "absolute",
@@ -29,31 +29,21 @@ const disclosureStyles = {
     padding: "2rem",
     zIndex: 1,
   },
-  dismissButton: {
-    background: "#004D49",
-    border: "none",
-    display: "block",
-    borderRadius: "3px",
-    fontFamily: "'Nunito Sans', sans-serif",
-    fontSize: "16px",
-    color: "white",
-    cursor: "pointer",
-    padding: "8px",
-    width: "100%",
-    // textDecoration: "underline",
-  },
   container: {
     animation: `${disclosureAnimateIn} 0.3s cubic-bezier(0.230, 1.000, 0.320, 1.000)`,
     backgroundColor: "#f3f1ec",
     borderRadius: "10px",
-    boxShadow: "0 2px 60px #7c7c7c8c",
-    margin: "0 auto",
+    boxShadow: "0 2px 30px #7c7c7c8c",
+    m: "0 auto",
     maxHeight: "calc(100% - 4rem)",
-    maxWidth: "500px",
-    padding: "2rem",
-    // border: "1px solid #f2f2f2",
+    maxWidth: "90%",
+    [`@container (min-width: ${theme?.breakpoints?.values?.sm}px)`]: {
+      maxWidth: "500px",
+    },
+    overflow: "auto",
+    p: "2rem",
   },
-};
+});
 
 export const Disclosure = ({
   setShowDisclosure,
@@ -61,8 +51,8 @@ export const Disclosure = ({
   setShowDisclosure: Dispatch<SetStateAction<boolean>>;
 }) => {
   return (
-    <Box sx={disclosureStyles.overlay}>
-      <Box sx={disclosureStyles.container} onAnimationEnd={() => {}}>
+    <Box sx={(theme) => disclosureStyles(theme).overlay} onClick={() => setShowDisclosure(false)}>
+      <Box sx={(theme) => disclosureStyles(theme).container}>
         <Typography
           variant="h6"
           marginBottom="1rem"
@@ -78,7 +68,12 @@ export const Disclosure = ({
             {
               "Your home equity and home value are estimates based on data about your home and the market currently available. We use a third party data source, "
             }
-            <a href="https://estated.com" target="_blank" rel="noreferrer">
+            <a
+              href="https://estated.com"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "#004D49", fontWeight: "bold" }}
+            >
               Estated
             </a>
             {
@@ -87,7 +82,21 @@ export const Disclosure = ({
           </Typography>
         </Box>
         <Box display="flex" justifyContent="center" marginTop="1rem">
-          <button style={disclosureStyles.dismissButton} onClick={() => setShowDisclosure(false)}>
+          <button
+            style={{
+              background: "#004D49",
+              border: "none",
+              display: "block",
+              borderRadius: "3px",
+              fontFamily: "'Nunito Sans', sans-serif",
+              fontSize: "16px",
+              color: "white",
+              cursor: "pointer",
+              padding: "8px",
+              width: "100%",
+            }}
+            onClick={() => setShowDisclosure(false)}
+          >
             Dismiss
           </button>
         </Box>

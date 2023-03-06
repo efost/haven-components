@@ -12,15 +12,15 @@ const { EsLinter, linterPlugin } = EsLint;
 // https://vitejs.dev/config/
 export default defineConfig((configEnv) => ({
   plugins: [
+    dts({
+      include: ["src/components/"],
+    }),
     del({
       targets: process.env.NODE_ENV === "production" ? ["dist/*"] : undefined,
     }),
     cleanup({
       comments: "none",
       extensions: ["js", "jsx", "ts", "tsx"],
-    }),
-    dts({
-      include: ["src/components/"],
     }),
     react(),
     tsConfigPaths(),
